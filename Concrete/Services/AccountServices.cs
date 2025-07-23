@@ -5,6 +5,7 @@ using StansAssociates_Backend.Concrete.IServices;
 using StansAssociates_Backend.Entities;
 using StansAssociates_Backend.Global;
 using StansAssociates_Backend.Models;
+using System.Diagnostics.Metrics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -61,7 +62,7 @@ namespace StansAssociates_Backend.Concrete.Services
         {
             user.RefreshTokens.Add(GenerateRefreshToken());
             _context.Update(user);
-       
+
             var response = new LoginResponse
             {
                 AccessToken = AccessToken(user, user.UserRoles.Select(x => x.Role.Name).ToList(), user.UserRoles.Select(x => (int)x.RoleId).ToList()),
@@ -71,7 +72,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 TokenType = "Bearer",
                 EmailId = user.EmailId,
                 UserName = $"{user.Name}",
-                PhoneNumber = user.PhoneNumber, 
+                PhoneNumber = user.PhoneNumber,
             };
             return new(ResponseConstants.LoginSuccess, 200, response);
         }
@@ -186,7 +187,16 @@ namespace StansAssociates_Backend.Concrete.Services
                                          UserId = x.Id,
                                          UserName = x.Name,
                                          EmailId = x.EmailId,
-                                         MobileNumber = x.PhoneNumber
+                                         PhoneNumber = x.PhoneNumber,
+                                         Gender = x.Gender,
+                                         DOB = x.DOB,
+                                         Street = x.Street,
+                                         City = x.City,
+                                         State = x.State,
+                                         Country = x.Country,
+                                         Pincode = x.Pincode,
+                                         ProfilePicture = x.ProfilePicture,
+                                         IsPasswordSet = x.Password != null
                                      })
                                      .FirstOrDefaultAsync();
             return new(ResponseConstants.Success, 200, user);
@@ -198,7 +208,15 @@ namespace StansAssociates_Backend.Concrete.Services
             var user = await _context.Users.Where(x => x.Id == _currentUser.UserId).FirstOrDefaultAsync();
             user.Name = model.UserName;
             user.EmailId = model.EmailId;
-
+            user.PhoneNumber = model.PhoneNumber;
+            user.Gender = model.Gender;
+            user.DOB = model.DOB;
+            user.Street = model.Street;
+            user.City = model.City;
+            user.State = model.State;
+            user.Country = model.Country;
+            user.Pincode = model.Pincode;
+            user.ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? (await _storageServices.UploadFile(S3Directories.ProfileMedia, model.ProfilePicture)).Data : string.Empty;
             _context.Update(user);
             await _context.SaveChangesAsync();
             return new(ResponseConstants.Success, 200, (await GetUserProfile()).Data);

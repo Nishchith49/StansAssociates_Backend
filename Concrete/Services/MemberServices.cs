@@ -22,6 +22,13 @@ namespace StansAssociates_Backend.Concrete.Services
 
         public async Task<APIResponse> AddStaff(AddStaffModel model)
         {
+            bool staffExists = await _context.Users
+                                             .Where(x => x.UserRoles.Any(x => x.RoleId == 2))
+                                             .AnyAsync(x => x.EmailId == model.EmailId || x.PhoneNumber == model.PhoneNumber);
+
+            if (staffExists)
+                return new APIResponse("A staff with this email or phone number already exists.", 400);
+
             var staff = new User
             {
                 Name = model.Name,
@@ -176,6 +183,13 @@ namespace StansAssociates_Backend.Concrete.Services
 
         public async Task<APIResponse> AddTeacher(AddTeacherModel model)
         {
+            var teacherExists = await _context.Users
+                                              .Where(x => x.UserRoles.Any(x => x.RoleId == 3))
+                                              .AnyAsync(x => x.EmailId == model.EmailId || x.PhoneNumber == model.PhoneNumber);
+
+            if (teacherExists)
+                return new APIResponse("A teacher with this email or phone number already exists.", 400);
+
             var teacher = new User
             {
                 Name = model.Name,

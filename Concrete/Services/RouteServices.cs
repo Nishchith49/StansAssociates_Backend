@@ -19,6 +19,21 @@ namespace StansAssociates_Backend.Concrete.Services
 
         public async Task<APIResponse> AddRoute(AddRouteModel model)
         {
+            var routeExists = await _context.Routes
+                                            .AnyAsync(x => x.BusNo
+                                                            .ToLower()
+                                                            .Replace(" ", string.Empty)
+                                                            .Equals(model.BusNo
+                                                                         .ToLower()
+                                                                         .Replace(" ", string.Empty)) &&
+                                                           x.BoardingPoint
+                                                            .ToLower()
+                                                            .Replace(" ", string.Empty)
+                                                            .Equals(model.BoardingPoint
+                                                                         .ToLower()
+                                                                         .Replace(" ", string.Empty)));
+            if (routeExists)
+                return new APIResponse("This route already exists.", 400);
             var route = new Route
             {
                 BusNo = model.BusNo,
@@ -35,8 +50,8 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<APIResponse> UpdateRoute(UpdateRouteModel model)
         {
             var route = await _context.Routes
-                                    .Where(x => x.Id == model.Id)
-                                    .FirstOrDefaultAsync();
+                                      .Where(x => x.Id == model.Id)
+                                      .FirstOrDefaultAsync();
             if (route == null)
                 return new(ResponseConstants.InvalidId, 400);
             route.BusNo = model.BusNo;

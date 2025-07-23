@@ -20,6 +20,15 @@ namespace StansAssociates_Backend.Concrete.Services
 
         public async Task<APIResponse> AddStudent(AddStudentModel model)
         {
+            bool studentExists = await _context.Students
+                                               .AnyAsync(x => x.AdmissionNo
+                                                               .ToLower()
+                                                               .Replace(" ", string.Empty)
+                                                               .Equals(model.AdmissionNo
+                                                                            .ToLower()
+                                                                            .Replace(" ", string.Empty)));
+            if (studentExists)
+                return new APIResponse("A student with this admission number already exists.", 400);
             var student = new Student
             {
                 Affiliation = model.Affiliation,
@@ -98,9 +107,9 @@ namespace StansAssociates_Backend.Concrete.Services
                                                  .ToString()
                                                  .ToLower()
                                                  .Replace(" ", string.Empty)
-                                                            .Equals(model.Session
-                                                                         .ToLower()
-                                                                         .Replace(" ", string.Empty)))
+                                                 .Equals(model.Session
+                                                              .ToLower()
+                                                              .Replace(" ", string.Empty)))
                                          .GroupBy(x => 1)
                                          .Select(x => new PagedResponseWithQuery<List<GetStudentModel>>
                                          {
@@ -269,6 +278,15 @@ namespace StansAssociates_Backend.Concrete.Services
 
         public async Task<APIResponse> AddSession(AddSessionModel model)
         {
+            bool sessionExists = await _context.Sessions
+                                               .AnyAsync(x => x.Name
+                                                               .ToLower()
+                                                               .Replace(" ", string.Empty)
+                                                               .Equals(model.Name
+                                                                            .ToLower()
+                                                                            .Replace(" ", string.Empty)));
+            if (sessionExists)
+                return new APIResponse("This session name already exists.", 400);
             var session = new Session
             {
                 Name = model.Name

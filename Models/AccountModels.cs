@@ -16,11 +16,6 @@ namespace StansAssociates_Backend.Models
 
         [JsonProperty("phoneNumber")]
         public string PhoneNumber { get; set; }
-
-        [JsonProperty("referralCode")]
-        public string ReferralCode { get; set; }
-
-        public AddAddressModel Address { get; set; }
     }
 
 
@@ -152,19 +147,13 @@ namespace StansAssociates_Backend.Models
     }
 
 
-    public class GetProfileModel
+    public class GetProfileModel : UpdateProfile
     {
         [JsonProperty("userId")]
         public long UserId { get; set; }
 
-        [JsonProperty("userName")]
-        public string UserName { get; set; }
-
-        [JsonProperty("emailId")]
-        public string EmailId { get; set; }
-
-        [JsonProperty("mobileNumber")]
-        public string MobileNumber { get; set; }
+        [JsonProperty("isPasswordSet")]
+        public bool IsPasswordSet { get; set; }
     }
 
 
@@ -175,110 +164,32 @@ namespace StansAssociates_Backend.Models
 
         [JsonProperty("emailId")]
         public string EmailId { get; set; }
-    }
-
-
-    public class UpdateEmailModel
-    {
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        [JsonProperty("oldOtp")]
-        public string OldOtp { get; set; }
-
-        [JsonProperty("newOtp")]
-        public string NewOtp { get; set; }
-    }
-
-    public class UpdatePhoneNumberModel
-    {
-        [JsonProperty("phoneNumber")]
-        public string PhoneNumber { get; set; }
-
-        [JsonProperty("oldOtp")]
-        public string OldOtp { get; set; }
-
-        [JsonProperty("newOtp")]
-        public string NewOtp { get; set; }
-    }
-
-    public class UpdateAddressModel : AddAddressModel
-    {
-        [JsonProperty("addressId")]
-        public long AddressId { get; set; }
-    }
-
-
-    public class GetAddressModel : UpdateAddressModel
-    {
-        [JsonProperty("cityName")]
-        public string CityName { get; set; }
-
-        [JsonProperty("stateName")]
-        public string StateName { get; set; }
-
-        [JsonProperty("countryName")]
-        public string CountryName { get; set; }
-    }
-
-
-    public class AddAddressModel
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("address1")]
-        public string Address1 { get; set; }
-
-        [JsonProperty("address2")]
-        public string Address2 { get; set; }
 
         [JsonProperty("phoneNumber")]
         public string PhoneNumber { get; set; }
+
+        [JsonProperty("gender")]
+        public string Gender { get; set; }
+
+        [JsonProperty("dob")]
+        public DateTime DOB { get; set; }
+
+        [JsonProperty("street")]
+        public string Street { get; set; }
+
+        [JsonProperty("city")]
+        public string City { get; set; }
+
+        [JsonProperty("state")]
+        public string State { get; set; }
+
+        [JsonProperty("country")]
+        public string Country { get; set; }
 
         [JsonProperty("pincode")]
         public string Pincode { get; set; }
 
-        [JsonProperty("cityId")]
-        public string CityId { get; set; }
-
-        [JsonProperty("stateId")]
-        public string StateId { get; set; }
-
-        [JsonProperty("countryId")]
-        public string CountryId { get; set; }
-
-        [JsonProperty("isDefault")]
-        public bool IsDefault { get; set; }
-
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("latitude")]
-        public double? Latitude { get; set; }
-
-        [JsonProperty("longitude")]
-        public double? Longitude { get; set; }
-    }
-
-
-    public class LocationData
-    {
-        public string FormattedAddress { get; set; }
-        public string Country { get; set; }
-        public string State { get; set; }
-        public string City { get; set; }
-        public string Pincode { get; set; }
-
-        public long CountryId { get; set; }
-        public long StateId { get; set; }
-        public long CityId { get; set; }
-        public long SubDistrictId { get; set; }
-
-        public bool IsValid() => !string.IsNullOrEmpty(FormattedAddress) &&
-                                 !string.IsNullOrEmpty(Country) &&
-                                 !string.IsNullOrEmpty(State) &&
-                                 !string.IsNullOrEmpty(City) &&
-                                 !string.IsNullOrEmpty(Pincode);
+        [JsonProperty("profilePicture")]
+        public string ProfilePicture { get; set; }
     }
 }
