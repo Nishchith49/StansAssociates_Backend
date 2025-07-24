@@ -42,7 +42,7 @@ namespace StansAssociates_Backend.Controllers
 
 
         [HttpGet("[action]")]
-        public async Task<ServiceResponse<List<GetStaffModel>>> GetStaff(long id)
+        public async Task<ServiceResponse<GetStaffModel>> GetStaff(long id)
         {
             return await _memberServices.GetStaff(id);
         }
@@ -77,7 +77,7 @@ namespace StansAssociates_Backend.Controllers
 
 
         [HttpGet("[action]")]
-        public async Task<ServiceResponse<List<GetTeacherModel>>> GetTeacher(long id)
+        public async Task<ServiceResponse<GetTeacherModel>> GetTeacher(long id)
         {
             return await _memberServices.GetTeacher(id);
         }

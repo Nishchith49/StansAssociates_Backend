@@ -138,7 +138,7 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
-        public async Task<ServiceResponse<List<GetStaffModel>>> GetStaff(long id)
+        public async Task<ServiceResponse<GetStaffModel>> GetStaff(long id)
         {
             var staff = await _context.Users
                                       .Where(x => x.UserRoles.Any(x => x.RoleId == 2))
@@ -162,7 +162,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                           CreatedDate = x.CreatedDate,
                                           UpdatedDate = x.UpdatedDate
                                       })
-                                      .ToListAsync();
+                                      .FirstOrDefaultAsync();
             return new(ResponseConstants.Success, 200, staff);
         }
 
@@ -280,7 +280,7 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
-        public async Task<ServiceResponse<List<GetTeacherModel>>> GetTeacher(long id)
+        public async Task<ServiceResponse<GetTeacherModel>> GetTeacher(long id)
         {
             var teacher = await _context.Users
                                         .Where(x => x.UserRoles.Any(x => x.RoleId == 3))
@@ -304,7 +304,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                             CreatedDate = x.CreatedDate,
                                             UpdatedDate = x.UpdatedDate
                                         })
-                                        .ToListAsync();
+                                        .FirstOrDefaultAsync();
             return new(ResponseConstants.Success, 200, teacher);
         }
 

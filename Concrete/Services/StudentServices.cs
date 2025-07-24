@@ -157,7 +157,7 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
-        public async Task<ServiceResponse<List<GetStudentModel>>> GetStudent(long id)
+        public async Task<ServiceResponse<GetStudentModel>> GetStudent(long id)
         {
             var student = await _context.Students
                                         .Where(x => x.Id == id)
@@ -195,7 +195,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                             CreatedDate = x.CreatedDate,
                                             UpdatedDate = x.UpdatedDate
                                         })
-                                        .ToListAsync();
+                                        .FirstOrDefaultAsync();
             return new(ResponseConstants.Success, 200, student);
         }
 

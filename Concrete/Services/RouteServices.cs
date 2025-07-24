@@ -90,7 +90,7 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
-        public async Task<ServiceResponse<List<GetRouteModel>>> GetRoute(long id)
+        public async Task<ServiceResponse<GetRouteModel>> GetRoute(long id)
         {
             var route = await _context.Routes
                                       .Where(x => x.Id == id)
@@ -104,7 +104,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                           CreatedDate = x.CreatedDate,
                                           UpdatedDate = x.UpdatedDate
                                       })
-                                      .ToListAsync();
+                                      .FirstOrDefaultAsync();
             return new(ResponseConstants.Success, 200, route);
         }
 

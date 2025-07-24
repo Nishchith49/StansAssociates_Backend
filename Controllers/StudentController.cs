@@ -41,7 +41,7 @@ namespace StansAssociates_Backend.Controllers
 
 
         [HttpGet("[action]")]
-        public async Task<ServiceResponse<List<GetStudentModel>>> GetStudent(long id)
+        public async Task<ServiceResponse<GetStudentModel>> GetStudent(long id)
         {
             return await _studentServices.GetStudent(id);
         }

@@ -42,7 +42,7 @@ namespace StansAssociates_Backend.Controllers
 
 
         [HttpGet("[action]")]
-        public async Task<ServiceResponse<List<GetRouteModel>>> GetRoute(long id)
+        public async Task<ServiceResponse<GetRouteModel>> GetRoute(long id)
         {
             return await _routeServices.GetRoute(id);
         }
