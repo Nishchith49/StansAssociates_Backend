@@ -4,7 +4,7 @@ namespace StansAssociates_Backend.Concrete.IServices
 {
     public interface IStudentServices
     {
-        Task<APIResponse> AddStudent(AddStudentModel model);
+        Task<ServiceResponse<long>> AddStudent(AddStudentModel model);
         Task<APIResponse> UpdateStudent(UpdateStudentModel model);
         Task<PagedResponse<List<GetStudentModel>>> GetStudents(GetStudentsFilterModel model);
         Task<ServiceResponse<GetStudentModel>> GetStudent(long id);

@@ -18,7 +18,7 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
-        public async Task<APIResponse> AddStudent(AddStudentModel model)
+        public async Task<ServiceResponse<long>> AddStudent(AddStudentModel model)
         {
             bool studentExists = await _context.Students
                                                .AnyAsync(x => x.AdmissionNo
@@ -28,7 +28,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                                             .ToLower()
                                                                             .Replace(" ", string.Empty)));
             if (studentExists)
-                return new APIResponse("A student with this admission number already exists.", 400);
+                return new("A student with this admission number already exists.", 400);
             var student = new Student
             {
                 Affiliation = model.Affiliation,
@@ -58,7 +58,7 @@ namespace StansAssociates_Backend.Concrete.Services
             };
             await _context.AddAsync(student);
             await _context.SaveChangesAsync();
-            return new(ResponseConstants.Success, 200);
+            return new(ResponseConstants.Success, 200, student.Id);
         }
 
 

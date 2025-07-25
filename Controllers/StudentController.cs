@@ -20,7 +20,7 @@ namespace StansAssociates_Backend.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<APIResponse> AddStudent(AddStudentModel model)
+        public async Task<ServiceResponse<long>> AddStudent(AddStudentModel model)
         {
             return await _studentServices.AddStudent(model);
         }
