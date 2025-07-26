@@ -185,6 +185,12 @@ namespace StansAssociates_Backend.Models
         [JsonProperty("phone")]
         public string Phone { get; set; }
 
+        [JsonProperty("class")]
+        public string Class { get; set; }
+
+        [JsonProperty("section")]
+        public string Section { get; set; }
+
         [JsonProperty("totalAmount")]
         public decimal TotalAmount { get; set; }
 

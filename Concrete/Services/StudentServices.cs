@@ -252,6 +252,8 @@ namespace StansAssociates_Backend.Concrete.Services
                                                     FatherName = x.FatherName,
                                                     AdmissionNo = x.AdmissionNo,
                                                     Phone = x.Phone,
+                                                    Class = x.Class,
+                                                    Section = x.Section,
                                                     TotalAmount = x.Route.RouteCost,
                                                     Paid = x.TotalPaid,
                                                     Due = x.Route.RouteCost - x.TotalPaid,
