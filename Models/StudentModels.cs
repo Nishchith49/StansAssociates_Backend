@@ -87,6 +87,9 @@ namespace StansAssociates_Backend.Models
 
     public class GetStudentModel : UpdateStudentModel
     {
+        [JsonProperty("schoolName")]
+        public string SchoolName { get; set; }
+
         [JsonProperty("busNo")]
         public string BusNo { get; set; }
 

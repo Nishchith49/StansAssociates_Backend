@@ -20,6 +20,13 @@ namespace StansAssociates_Backend.Entities
         [Column("route_cost")]
         public decimal RouteCost { get; set; }
 
+        [Column("school_id")]
+        public long SchoolId { get; set; }
+
+        [ForeignKey(nameof(SchoolId))]
+        [InverseProperty(nameof(User.Routes))]
+        public User School { get; set; }
+
         [InverseProperty(nameof(Student.Route))]
         public virtual ICollection<Student> Students { get; set; }
     }

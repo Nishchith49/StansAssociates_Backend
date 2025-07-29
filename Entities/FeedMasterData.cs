@@ -8,6 +8,7 @@ namespace StansAssociates_Backend.Entities
         {
             SeedRoleMasterData(modelBuilder);
             AddSuperAdminUser(modelBuilder);
+            AddModules(modelBuilder);
         }
 
 
@@ -28,6 +29,11 @@ namespace StansAssociates_Backend.Entities
                 {
                     Id = 3,
                     Name = "Teacher"
+                },
+                new Role
+                {
+                    Id = 4,
+                    Name = "School"
                 }
                 );
         }
@@ -65,6 +71,21 @@ namespace StansAssociates_Backend.Entities
                     UserId = 1,
                 }
                 );
+        }
+
+
+        public static void AddModules(ModelBuilder modelBuilder)
+        {
+            var modules = new List<string>
+            {
+                "Dashboard"
+            };
+
+            var modulesToAdd = modules
+                    .Select((name, index) => new Module { Id = index + 1, Name = name })
+                    .ToList();
+
+            modelBuilder.Entity<Module>().HasData(modulesToAdd);
         }
     }
 }

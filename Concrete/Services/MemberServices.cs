@@ -31,6 +31,7 @@ namespace StansAssociates_Backend.Concrete.Services
 
             var staff = new User
             {
+                SchoolId = _currentUser.UserId,
                 Name = model.Name,
                 EmailId = model.EmailId,
                 PhoneNumber = model.PhoneNumber,
@@ -83,28 +84,29 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
-        public async Task<APIResponse> UpdatePassword(UpdatePasswordModel model)
-        {
-            var staff = await _context.Users
-                                      .Where(x => x.Id == model.StaffId)
-                                      .FirstOrDefaultAsync();
-            if (staff == null)
-                return new(ResponseConstants.InvalidId, 400);
-            if (Decipher(staff.Password) != model.CurrentPassword)
-                return new("Current password is incorrect", 400);
-            if (model.NewPassword == Decipher(staff.Password))
-                return new("New password cannot be the same as the current password", 400);
-            staff.Password = Encipher(model.NewPassword);
-            staff.UpdatedDate = DateTime.Now;
-            _context.Update(staff);
-            await _context.SaveChangesAsync();
-            return new(ResponseConstants.Success, 200);
-        }
+        //public async Task<APIResponse> UpdatePassword(UpdatePasswordModel model)
+        //{
+        //    var staff = await _context.Users
+        //                              .Where(x => x.Id == model.StaffId)
+        //                              .FirstOrDefaultAsync();
+        //    if (staff == null)
+        //        return new(ResponseConstants.InvalidId, 400);
+        //    if (Decipher(staff.Password) != model.CurrentPassword)
+        //        return new("Current password is incorrect", 400);
+        //    if (model.NewPassword == Decipher(staff.Password))
+        //        return new("New password cannot be the same as the current password", 400);
+        //    staff.Password = Encipher(model.NewPassword);
+        //    staff.UpdatedDate = DateTime.Now;
+        //    _context.Update(staff);
+        //    await _context.SaveChangesAsync();
+        //    return new(ResponseConstants.Success, 200);
+        //}
 
 
         public async Task<PagedResponse<List<GetStaffModel>>> GetStaffs(PagedResponseInput model)
         {
             var staffs = await _context.Users
+                                       .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.UserId)
                                        .Where(x => x.UserRoles.Any(x => x.RoleId == 2))
                                        .GroupBy(x => 1)
                                        .Select(x => new PagedResponseWithQuery<List<GetStaffModel>>
@@ -124,10 +126,22 @@ namespace StansAssociates_Backend.Concrete.Services
                                                Country = x.Country,
                                                Pincode = x.Pincode,
                                                Password = Decipher(x.Password),
+                                               SchoolName = x.School.Name,
                                                IsActive = x.IsActive,
                                                ProfilePicture = x.ProfilePicture,
                                                CreatedDate = x.CreatedDate,
-                                               UpdatedDate = x.UpdatedDate
+                                               UpdatedDate = x.UpdatedDate,
+                                               Permissions = _context.Modules
+                                                                     .Select(a => new GetTeamPermissions
+                                                                     {
+                                                                         ModuleId = a.Id,
+                                                                         ModuleName = a.Name,
+                                                                         CanView = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanView).FirstOrDefault(),
+                                                                         CanAdd = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanAdd).FirstOrDefault(),
+                                                                         CanEdit = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanEdit).FirstOrDefault(),
+                                                                         CanDelete = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanDelete).FirstOrDefault()
+                                                                     })
+                                                                     .ToList()
                                            })
                                            .Skip(model.PageSize * model.PageIndex)
                                            .Take(model.PageSize)
@@ -157,10 +171,22 @@ namespace StansAssociates_Backend.Concrete.Services
                                           Country = x.Country,
                                           Pincode = x.Pincode,
                                           Password = Decipher(x.Password),
+                                          SchoolName = x.School.Name,
                                           IsActive = x.IsActive,
                                           ProfilePicture = x.ProfilePicture,
                                           CreatedDate = x.CreatedDate,
-                                          UpdatedDate = x.UpdatedDate
+                                          UpdatedDate = x.UpdatedDate,
+                                          Permissions = _context.Modules
+                                                                .Select(a => new GetTeamPermissions
+                                                                {
+                                                                    ModuleId = a.Id,
+                                                                    ModuleName = a.Name,
+                                                                    CanView = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanView).FirstOrDefault(),
+                                                                    CanAdd = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanAdd).FirstOrDefault(),
+                                                                    CanEdit = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanEdit).FirstOrDefault(),
+                                                                    CanDelete = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanDelete).FirstOrDefault()
+                                                                })
+                                                                .ToList()
                                       })
                                       .FirstOrDefaultAsync();
             return new(ResponseConstants.Success, 200, staff);
@@ -192,6 +218,7 @@ namespace StansAssociates_Backend.Concrete.Services
 
             var teacher = new User
             {
+                SchoolId = _currentUser.UserId,
                 Name = model.Name,
                 EmailId = model.EmailId,
                 PhoneNumber = model.PhoneNumber,
@@ -247,6 +274,7 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<PagedResponse<List<GetTeacherModel>>> GetTeachers(PagedResponseInput model)
         {
             var teachers = await _context.Users
+                                         .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.UserId)
                                          .Where(x => x.UserRoles.Any(x => x.RoleId == 3))
                                          .GroupBy(x => 1)
                                          .Select(x => new PagedResponseWithQuery<List<GetTeacherModel>>
@@ -267,9 +295,21 @@ namespace StansAssociates_Backend.Concrete.Services
                                                  Pincode = x.Pincode,
                                                  //Password = Decipher(x.Password),
                                                  IsActive = x.IsActive,
+                                                 SchoolName = x.School.Name,
                                                  ProfilePicture = x.ProfilePicture,
                                                  CreatedDate = x.CreatedDate,
-                                                 UpdatedDate = x.UpdatedDate
+                                                 UpdatedDate = x.UpdatedDate,
+                                                 Permissions = _context.Modules
+                                                                       .Select(a => new GetTeamPermissions
+                                                                       {
+                                                                           ModuleId = a.Id,
+                                                                           ModuleName = a.Name,
+                                                                           CanView = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanView).FirstOrDefault(),
+                                                                           CanAdd = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanAdd).FirstOrDefault(),
+                                                                           CanEdit = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanEdit).FirstOrDefault(),
+                                                                           CanDelete = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanDelete).FirstOrDefault()
+                                                                       })
+                                                                       .ToList()
                                              })
                                              .Skip(model.PageSize * model.PageIndex)
                                              .Take(model.PageSize)
@@ -302,7 +342,18 @@ namespace StansAssociates_Backend.Concrete.Services
                                             IsActive = x.IsActive,
                                             ProfilePicture = x.ProfilePicture,
                                             CreatedDate = x.CreatedDate,
-                                            UpdatedDate = x.UpdatedDate
+                                            UpdatedDate = x.UpdatedDate,
+                                            Permissions = _context.Modules
+                                                                  .Select(a => new GetTeamPermissions
+                                                                  {
+                                                                      ModuleId = a.Id,
+                                                                      ModuleName = a.Name,
+                                                                      CanView = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanView).FirstOrDefault(),
+                                                                      CanAdd = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanAdd).FirstOrDefault(),
+                                                                      CanEdit = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanEdit).FirstOrDefault(),
+                                                                      CanDelete = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanDelete).FirstOrDefault()
+                                                                  })
+                                                                  .ToList(),
                                         })
                                         .FirstOrDefaultAsync();
             return new(ResponseConstants.Success, 200, teacher);

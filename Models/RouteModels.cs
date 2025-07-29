@@ -4,6 +4,9 @@ namespace StansAssociates_Backend.Models
 {
     public class AddRouteModel
     {
+        [JsonProperty("schoolId")]
+        public long SchoolId { get; set; }
+
         [JsonProperty("busNo")]
         public string BusNo { get; set; }
 
@@ -24,6 +27,9 @@ namespace StansAssociates_Backend.Models
 
     public class GetRouteModel: UpdateRouteModel
     {
+        [JsonProperty("schoolName")]
+        public string SchoolName { get; set; }
+
         [JsonProperty("isActive")]
         public bool IsActive { get; set; }
 

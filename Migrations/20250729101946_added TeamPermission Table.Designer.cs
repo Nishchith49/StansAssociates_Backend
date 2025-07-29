@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StansAssociates_Backend.Entities;
 
@@ -11,9 +12,11 @@ using StansAssociates_Backend.Entities;
 namespace StansAssociates_Backend.Migrations
 {
     [DbContext(typeof(StansassociatesAntonyContext))]
-    partial class StansassociatesAntonyContextModelSnapshot : ModelSnapshot
+    [Migration("20250729101946_added TeamPermission Table")]
+    partial class addedTeamPermissionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,13 +42,6 @@ namespace StansAssociates_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("module");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Name = "Dashboard"
-                        });
                 });
 
             modelBuilder.Entity("StansAssociates_Backend.Entities.RefreshToken", b =>
@@ -157,17 +153,11 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnType("decimal(65,30)")
                         .HasColumnName("route_cost");
 
-                    b.Property<long>("SchoolId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("school_id");
-
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("updated_date");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
 
                     b.ToTable("route");
                 });
@@ -295,10 +285,6 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("routeId");
 
-                    b.Property<long>("SchoolId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("school_id");
-
                     b.Property<string>("Section")
                         .IsRequired()
                         .HasColumnType("longtext")
@@ -331,8 +317,6 @@ namespace StansAssociates_Backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RouteId");
-
-                    b.HasIndex("SchoolId");
 
                     b.ToTable("student");
                 });
@@ -475,7 +459,7 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_date");
 
-                    b.Property<DateTime?>("DOB")
+                    b.Property<DateTime>("DOB")
                         .HasColumnType("date")
                         .HasColumnName("dob");
 
@@ -485,6 +469,7 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnName("email_id");
 
                     b.Property<string>("Gender")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("gender");
 
@@ -516,12 +501,13 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnName("pincode");
 
                     b.Property<string>("ProfilePicture")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("Profile_picture");
 
                     b.Property<long?>("SchoolId")
                         .HasColumnType("bigint")
-                        .HasColumnName("school_id");
+                        .HasColumnName("schoolId");
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -611,17 +597,6 @@ namespace StansAssociates_Backend.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("StansAssociates_Backend.Entities.Route", b =>
-                {
-                    b.HasOne("StansAssociates_Backend.Entities.User", "School")
-                        .WithMany("Routes")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
             modelBuilder.Entity("StansAssociates_Backend.Entities.Student", b =>
                 {
                     b.HasOne("StansAssociates_Backend.Entities.Route", "Route")
@@ -630,15 +605,7 @@ namespace StansAssociates_Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StansAssociates_Backend.Entities.User", "School")
-                        .WithMany("Students")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Route");
-
-                    b.Navigation("School");
                 });
 
             modelBuilder.Entity("StansAssociates_Backend.Entities.StudentFeesHistory", b =>
@@ -749,11 +716,7 @@ namespace StansAssociates_Backend.Migrations
                 {
                     b.Navigation("RefreshTokens");
 
-                    b.Navigation("Routes");
-
                     b.Navigation("Schools");
-
-                    b.Navigation("Students");
 
                     b.Navigation("TeamPermissions");
 

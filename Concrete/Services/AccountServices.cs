@@ -37,6 +37,7 @@ namespace StansAssociates_Backend.Concrete.Services
             var user = await _context.Users
                                      .Include(x => x.UserRoles)
                                       .ThenInclude(x => x.Role)
+                                     .Include(x => x.TeamPermissions)
                                      .Where(x => x.EmailId
                                                   .ToLower()
                                                   .Replace(" ", string.Empty)
@@ -63,6 +64,27 @@ namespace StansAssociates_Backend.Concrete.Services
             user.RefreshTokens.Add(GenerateRefreshToken());
             _context.Update(user);
 
+            var permissions = new List<GetTeamPermissions>();
+
+            if (user != null && user.TeamPermissions != null)
+            {
+                permissions = _context.Modules
+                                      .Select(x => new GetTeamPermissions
+                                      {
+                                          ModuleId = x.Id,
+                                          ModuleName = x.Name
+                                      })
+                                      .ToList();
+
+                permissions.ForEach(x =>
+                {
+                    x.CanView = user.TeamPermissions.Where(a => a.ModuleId == x.ModuleId).Select(a => a.CanView).FirstOrDefault();
+                    x.CanEdit = user.TeamPermissions.Where(a => a.ModuleId == x.ModuleId).Select(a => a.CanEdit).FirstOrDefault();
+                    x.CanAdd = user.TeamPermissions.Where(a => a.ModuleId == x.ModuleId).Select(a => a.CanAdd).FirstOrDefault();
+                    x.CanDelete = user.TeamPermissions.Where(a => a.ModuleId == x.ModuleId).Select(a => a.CanDelete).FirstOrDefault();
+                });
+            }
+
             var response = new LoginResponse
             {
                 AccessToken = AccessToken(user, user.UserRoles.Select(x => x.Role.Name).ToList(), user.UserRoles.Select(x => (int)x.RoleId).ToList()),
@@ -73,6 +95,8 @@ namespace StansAssociates_Backend.Concrete.Services
                 EmailId = user.EmailId,
                 UserName = $"{user.Name}",
                 PhoneNumber = user.PhoneNumber,
+                ProfilePicture = user.ProfilePicture,
+                Permissions = permissions
             };
             return new(ResponseConstants.LoginSuccess, 200, response);
         }

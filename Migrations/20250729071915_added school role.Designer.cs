@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StansAssociates_Backend.Entities;
 
@@ -11,9 +12,11 @@ using StansAssociates_Backend.Entities;
 namespace StansAssociates_Backend.Migrations
 {
     [DbContext(typeof(StansassociatesAntonyContext))]
-    partial class StansassociatesAntonyContextModelSnapshot : ModelSnapshot
+    [Migration("20250729071915_added school role")]
+    partial class addedschoolrole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,32 +24,6 @@ namespace StansAssociates_Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("StansAssociates_Backend.Entities.Module", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("module");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Name = "Dashboard"
-                        });
-                });
 
             modelBuilder.Entity("StansAssociates_Backend.Entities.RefreshToken", b =>
                 {
@@ -157,17 +134,11 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnType("decimal(65,30)")
                         .HasColumnName("route_cost");
 
-                    b.Property<long>("SchoolId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("school_id");
-
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("updated_date");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
 
                     b.ToTable("route");
                 });
@@ -295,10 +266,6 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("routeId");
 
-                    b.Property<long>("SchoolId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("school_id");
-
                     b.Property<string>("Section")
                         .IsRequired()
                         .HasColumnType("longtext")
@@ -331,8 +298,6 @@ namespace StansAssociates_Backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RouteId");
-
-                    b.HasIndex("SchoolId");
 
                     b.ToTable("student");
                 });
@@ -410,48 +375,6 @@ namespace StansAssociates_Backend.Migrations
                     b.ToTable("studentbysession");
                 });
 
-            modelBuilder.Entity("StansAssociates_Backend.Entities.TeamPermission", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<bool>("CanAdd")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("can_add");
-
-                    b.Property<bool>("CanDelete")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("can_delete");
-
-                    b.Property<bool>("CanEdit")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("can_edit");
-
-                    b.Property<bool>("CanView")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("can_view");
-
-                    b.Property<long>("ModuleId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("module_id");
-
-                    b.Property<long>("TeamId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("team_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModuleId");
-
-                    b.HasIndex("TeamId");
-
-                    b.ToTable("team_permissions");
-                });
-
             modelBuilder.Entity("StansAssociates_Backend.Entities.User", b =>
                 {
                     b.Property<long>("Id")
@@ -475,7 +398,7 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_date");
 
-                    b.Property<DateTime?>("DOB")
+                    b.Property<DateTime>("DOB")
                         .HasColumnType("date")
                         .HasColumnName("dob");
 
@@ -485,6 +408,7 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnName("email_id");
 
                     b.Property<string>("Gender")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("gender");
 
@@ -516,12 +440,9 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnName("pincode");
 
                     b.Property<string>("ProfilePicture")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("Profile_picture");
-
-                    b.Property<long?>("SchoolId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("school_id");
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -538,8 +459,6 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnName("updated_date");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
 
                     b.ToTable("user");
 
@@ -611,17 +530,6 @@ namespace StansAssociates_Backend.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("StansAssociates_Backend.Entities.Route", b =>
-                {
-                    b.HasOne("StansAssociates_Backend.Entities.User", "School")
-                        .WithMany("Routes")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
             modelBuilder.Entity("StansAssociates_Backend.Entities.Student", b =>
                 {
                     b.HasOne("StansAssociates_Backend.Entities.Route", "Route")
@@ -630,15 +538,7 @@ namespace StansAssociates_Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StansAssociates_Backend.Entities.User", "School")
-                        .WithMany("Students")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Route");
-
-                    b.Navigation("School");
                 });
 
             modelBuilder.Entity("StansAssociates_Backend.Entities.StudentFeesHistory", b =>
@@ -671,34 +571,6 @@ namespace StansAssociates_Backend.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("StansAssociates_Backend.Entities.TeamPermission", b =>
-                {
-                    b.HasOne("StansAssociates_Backend.Entities.Module", "Module")
-                        .WithMany("TeamPermissions")
-                        .HasForeignKey("ModuleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StansAssociates_Backend.Entities.User", "Teams")
-                        .WithMany("TeamPermissions")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Module");
-
-                    b.Navigation("Teams");
-                });
-
-            modelBuilder.Entity("StansAssociates_Backend.Entities.User", b =>
-                {
-                    b.HasOne("StansAssociates_Backend.Entities.User", "School")
-                        .WithMany("Schools")
-                        .HasForeignKey("SchoolId");
-
-                    b.Navigation("School");
-                });
-
             modelBuilder.Entity("StansAssociates_Backend.Entities.UserRole", b =>
                 {
                     b.HasOne("StansAssociates_Backend.Entities.Role", "Role")
@@ -716,11 +588,6 @@ namespace StansAssociates_Backend.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("StansAssociates_Backend.Entities.Module", b =>
-                {
-                    b.Navigation("TeamPermissions");
                 });
 
             modelBuilder.Entity("StansAssociates_Backend.Entities.Role", b =>
@@ -748,14 +615,6 @@ namespace StansAssociates_Backend.Migrations
             modelBuilder.Entity("StansAssociates_Backend.Entities.User", b =>
                 {
                     b.Navigation("RefreshTokens");
-
-                    b.Navigation("Routes");
-
-                    b.Navigation("Schools");
-
-                    b.Navigation("Students");
-
-                    b.Navigation("TeamPermissions");
 
                     b.Navigation("UserRoles");
                 });

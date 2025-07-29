@@ -71,6 +71,12 @@ namespace StansAssociates_Backend.Models
 
         [JsonProperty("userName")]
         public string UserName { get; set; }
+
+        [JsonProperty("profilePicture")]
+        public string ProfilePicture { get; set; }
+
+        [JsonProperty("permissions")]
+        public List<GetTeamPermissions> Permissions { get; set; } = [];
     }
 
 
@@ -172,7 +178,7 @@ namespace StansAssociates_Backend.Models
         public string Gender { get; set; }
 
         [JsonProperty("dob")]
-        public DateTime DOB { get; set; }
+        public DateTime? DOB { get; set; }
 
         [JsonProperty("street")]
         public string Street { get; set; }

@@ -30,5 +30,7 @@ namespace StansAssociates_Backend.Concrete.Services
 
         public List<int> RoleIds => JsonConvert.DeserializeObject<List<int>>(_httpContext.HttpContext.User.FindFirst("role_ids").Value);
 
+        public bool IsAdmin => RoleType.Equals("Admin", StringComparison.OrdinalIgnoreCase) || RoleIds.Contains(1);
+
     }
 }

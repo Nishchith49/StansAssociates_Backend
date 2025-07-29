@@ -104,6 +104,8 @@ builder.Services.AddScoped<IRouteServices, RouteServices>();
 builder.Services.AddScoped<IStorageServices, StorageServices>();
 builder.Services.AddScoped<IStudentServices, StudentService>();
 builder.Services.AddScoped<IDropDownServices, DropDownServices>();
+builder.Services.AddScoped<ISchoolServices, SchoolServices>();
+builder.Services.AddScoped<ITeamServices, TeamServices>();
 
 var app = builder.Build();
 

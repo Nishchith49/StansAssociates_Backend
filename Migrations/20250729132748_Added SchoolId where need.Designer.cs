@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StansAssociates_Backend.Entities;
 
@@ -11,9 +12,11 @@ using StansAssociates_Backend.Entities;
 namespace StansAssociates_Backend.Migrations
 {
     [DbContext(typeof(StansassociatesAntonyContext))]
-    partial class StansassociatesAntonyContextModelSnapshot : ModelSnapshot
+    [Migration("20250729132748_Added SchoolId where need")]
+    partial class AddedSchoolIdwhereneed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,13 +42,6 @@ namespace StansAssociates_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("module");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Name = "Dashboard"
-                        });
                 });
 
             modelBuilder.Entity("StansAssociates_Backend.Entities.RefreshToken", b =>
@@ -475,7 +471,7 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_date");
 
-                    b.Property<DateTime?>("DOB")
+                    b.Property<DateTime>("DOB")
                         .HasColumnType("date")
                         .HasColumnName("dob");
 
@@ -485,6 +481,7 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnName("email_id");
 
                     b.Property<string>("Gender")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("gender");
 
@@ -516,6 +513,7 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnName("pincode");
 
                     b.Property<string>("ProfilePicture")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("Profile_picture");
 

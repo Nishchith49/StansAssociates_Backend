@@ -2,7 +2,7 @@
 
 namespace StansAssociates_Backend.Models
 {
-    public class AddStaffModel
+    public class AddSchoolModel
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -12,12 +12,6 @@ namespace StansAssociates_Backend.Models
 
         [JsonProperty("phoneNumber")]
         public string PhoneNumber { get; set; }
-
-        [JsonProperty("gender")]
-        public string Gender { get; set; }
-
-        [JsonProperty("dob")]
-        public DateTime? DOB { get; set; }
 
         [JsonProperty("street")]
         public string Street { get; set; }
@@ -42,31 +36,15 @@ namespace StansAssociates_Backend.Models
     }
 
 
-    public class UpdateStaffModel : AddStaffModel
+    public class UpdateSchoolModel : AddSchoolModel
     {
         [JsonProperty("id")]
         public long Id { get; set; }
     }
 
 
-    public class UpdatePasswordModel
+    public class GetSchoolModel : UpdateSchoolModel
     {
-        [JsonProperty("staffId")]
-        public long StaffId { get; set; }
-
-        [JsonProperty("currentPassword")]
-        public string CurrentPassword { get; set; }
-
-        [JsonProperty("newPassword")]
-        public string NewPassword { get; set; }
-    }
-
-
-    public class GetStaffModel : UpdateStaffModel
-    {
-        [JsonProperty("schoolName")]
-        public string SchoolName { get; set; }
-
         [JsonProperty("isActive")]
         public bool IsActive { get; set; }
 
@@ -75,26 +53,5 @@ namespace StansAssociates_Backend.Models
 
         [JsonProperty("updatedDate")]
         public DateTime UpdatedDate { get; set; }
-
-        [JsonProperty("permissions")]
-        public new List<GetTeamPermissions> Permissions { get; set; }
-    }
-
-
-    public class AddTeacherModel : AddStaffModel
-    {
-
-    }
-
-
-    public class UpdateTeacherModel : UpdateStaffModel
-    {
-
-    }
-
-
-    public class GetTeacherModel : GetStaffModel
-    {
-
     }
 }

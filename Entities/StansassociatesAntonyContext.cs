@@ -18,6 +18,8 @@ public partial class StansassociatesAntonyContext : DbContext
     public virtual DbSet<Role> Roles { get; set; }
     public virtual DbSet<UserRole> UserRoles { get; set; }
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+    public virtual DbSet<Module> Modules { get; set; }
+    public virtual DbSet<TeamPermission> TeamPermissions { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

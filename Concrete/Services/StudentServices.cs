@@ -10,11 +10,13 @@ namespace StansAssociates_Backend.Concrete.Services
     {
         private readonly StansassociatesAntonyContext _context;
         private readonly IStorageServices _storageServices;
+        private readonly ICurrentUserServices _currentUser;
 
-        public StudentService(StansassociatesAntonyContext context, IStorageServices storageServices)
+        public StudentService(StansassociatesAntonyContext context, IStorageServices storageServices, ICurrentUserServices currentUser)
         {
             _context = context;
             _storageServices = storageServices;
+            _currentUser = currentUser;
         }
 
 
@@ -31,6 +33,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 return new("A student with this admission number already exists.", 400);
             var student = new Student
             {
+                SchoolId = _currentUser.UserId,
                 Affiliation = model.Affiliation,
                 AdmissionNo = model.AdmissionNo,
                 RollNo = model.RollNo,
@@ -102,14 +105,15 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<PagedResponse<List<GetStudentModel>>> GetStudents(GetStudentsFilterModel model)
         {
             var students = await _context.Students
+                                         .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.UserId)
                                          .Where(x => string.IsNullOrWhiteSpace(model.Session) ||
-                                                x.Year
-                                                 .ToString()
-                                                 .ToLower()
-                                                 .Replace(" ", string.Empty)
-                                                 .Equals(model.Session
-                                                              .ToLower()
-                                                              .Replace(" ", string.Empty)))
+                                                     x.Year
+                                                      .ToString()
+                                                      .ToLower()
+                                                      .Replace(" ", string.Empty)
+                                                      .Equals(model.Session
+                                                                   .ToLower()
+                                                                   .Replace(" ", string.Empty)))
                                          .GroupBy(x => 1)
                                          .Select(x => new PagedResponseWithQuery<List<GetStudentModel>>
                                          {
@@ -117,6 +121,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                              Data = x.Select(x => new GetStudentModel
                                              {
                                                  Id = x.Id,
+                                                 SchoolName = x.School.Name,
                                                  Affiliation = x.Affiliation,
                                                  AdmissionNo = x.AdmissionNo,
                                                  RollNo = x.RollNo,
@@ -164,6 +169,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                         .Select(x => new GetStudentModel
                                         {
                                             Id = x.Id,
+                                            SchoolName = x.School.Name,
                                             Affiliation = x.Affiliation,
                                             AdmissionNo = x.AdmissionNo,
                                             RollNo = x.RollNo,

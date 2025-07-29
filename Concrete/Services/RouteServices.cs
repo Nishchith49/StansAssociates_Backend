@@ -20,7 +20,8 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<APIResponse> AddRoute(AddRouteModel model)
         {
             var routeExists = await _context.Routes
-                                            .AnyAsync(x => x.BusNo
+                                            .AnyAsync(x => x.SchoolId == model.SchoolId &&
+                                                           x.BusNo
                                                             .ToLower()
                                                             .Replace(" ", string.Empty)
                                                             .Equals(model.BusNo
@@ -46,7 +47,7 @@ namespace StansAssociates_Backend.Concrete.Services
             return new(ResponseConstants.Success, 200);
         }
 
-
+         
         public async Task<APIResponse> UpdateRoute(UpdateRouteModel model)
         {
             var route = await _context.Routes
@@ -54,6 +55,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                       .FirstOrDefaultAsync();
             if (route == null)
                 return new(ResponseConstants.InvalidId, 400);
+            route.SchoolId = model.SchoolId;
             route.BusNo = model.BusNo;
             route.BoardingPoint = model.BoardingPoint;
             route.RouteCost = model.RouteCost;
@@ -74,6 +76,8 @@ namespace StansAssociates_Backend.Concrete.Services
                                            Data = x.Select(x => new GetRouteModel
                                            {
                                                Id = x.Id,
+                                               SchoolId = x.SchoolId,
+                                               SchoolName = x.School.Name,
                                                BusNo = x.BusNo,
                                                BoardingPoint = x.BoardingPoint,
                                                RouteCost = x.RouteCost,
@@ -97,6 +101,8 @@ namespace StansAssociates_Backend.Concrete.Services
                                       .Select(x => new GetRouteModel
                                       {
                                           Id = x.Id,
+                                          SchoolId = x.SchoolId,
+                                          SchoolName = x.School.Name,
                                           BusNo = x.BusNo,
                                           BoardingPoint = x.BoardingPoint,
                                           RouteCost = x.RouteCost,

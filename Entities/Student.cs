@@ -89,6 +89,13 @@ namespace StansAssociates_Backend.Entities
         [Column("remark")]
         public string? Remark { get; set; }
 
+        [Column("school_id")]
+        public long SchoolId { get; set; }
+
+        [ForeignKey(nameof(SchoolId))]
+        [InverseProperty(nameof(User.Students))]
+        public User School { get; set; }
+
         [InverseProperty(nameof(StudentFeesHistory.Student))]
         public virtual ICollection<StudentFeesHistory> StudentFeesHistories { get; set; }
 

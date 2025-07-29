@@ -10,5 +10,6 @@
         List<int> RoleIds { get; }
         string RoleType { get; }
         int UserId { get; }
+        bool IsAdmin { get; }
     }
 }
