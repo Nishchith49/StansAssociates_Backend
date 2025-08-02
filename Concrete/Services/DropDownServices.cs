@@ -50,6 +50,7 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<List<DropDownModel>> GetSchoolDropDown()
         {
             var res = await _context.Users
+                                    .Where(x => x.UserRoles.Any(x => x.RoleId == 4))
                                     .Select(x => new DropDownModel
                                     {
                                         Label = x.Name,
