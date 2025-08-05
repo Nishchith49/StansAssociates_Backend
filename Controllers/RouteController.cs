@@ -35,7 +35,7 @@ namespace StansAssociates_Backend.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<PagedResponse<List<GetRouteModel>>> GetRoutes(PagedResponseInput model)
+        public async Task<PagedResponse<List<GetRouteModel>>> GetRoutes(GetRoutesFilterModel model)
         {
             return await _routeServices.GetRoutes(model);
         }

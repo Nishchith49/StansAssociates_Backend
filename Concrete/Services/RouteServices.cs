@@ -67,9 +67,14 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
-        public async Task<PagedResponse<List<GetRouteModel>>> GetRoutes(PagedResponseInput model)
+        public async Task<PagedResponse<List<GetRouteModel>>> GetRoutes(GetRoutesFilterModel model)
         {
             var routes = await _context.Routes
+                                       .Where(x => model.SchoolId == null || x.SchoolId == model.SchoolId)
+                                       .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
+                                                   x.BoardingPoint.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                   x.BusNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                   x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                        .GroupBy(x => 1)
                                        .Select(x => new PagedResponseWithQuery<List<GetRouteModel>>
                                        {

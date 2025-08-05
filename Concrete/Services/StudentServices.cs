@@ -106,6 +106,7 @@ namespace StansAssociates_Backend.Concrete.Services
         {
             var students = await _context.Students
                                          .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.UserId)
+                                         .Where(x => model.SchoolId == null || x.SchoolId == model.SchoolId)
                                          .Where(x => string.IsNullOrWhiteSpace(model.Session) ||
                                                      x.Year
                                                       .ToString()
@@ -114,6 +115,10 @@ namespace StansAssociates_Backend.Concrete.Services
                                                       .Equals(model.Session
                                                                    .ToLower()
                                                                    .Replace(" ", string.Empty)))
+                                         .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
+                                                    (x.FName + x.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.AdmissionNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                          .GroupBy(x => 1)
                                          .Select(x => new PagedResponseWithQuery<List<GetStudentModel>>
                                          {
@@ -246,6 +251,11 @@ namespace StansAssociates_Backend.Concrete.Services
         {
             var studentFees = await _context.Students
                                             .Where(x => model.StudentId == null || x.Id == model.StudentId)
+                                            .Where(x => model.SchoolId == null || x.SchoolId == model.SchoolId)
+                                            .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
+                                                       (x.FName + x.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                        x.AdmissionNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                        x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                             .GroupBy(x => 1)
                                             .Select(x => new PagedResponseWithQuery<List<GetStudentFeeDetailsModel>>
                                             {
@@ -308,6 +318,8 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<PagedResponse<List<GetSessionModel>>> GetSessions(PagedResponseInput model)
         {
             var sessions = await _context.Sessions
+                                         .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
+                                                     x.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                          .GroupBy(x => 1)
                                          .Select(x => new PagedResponseWithQuery<List<GetSessionModel>>
                                          {

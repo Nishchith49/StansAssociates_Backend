@@ -6,7 +6,7 @@ namespace StansAssociates_Backend.Concrete.IServices
     {
         Task<APIResponse> AddRoute(AddRouteModel model);
         Task<APIResponse> UpdateRoute(UpdateRouteModel model);
-        Task<PagedResponse<List<GetRouteModel>>> GetRoutes(PagedResponseInput model);
+        Task<PagedResponse<List<GetRouteModel>>> GetRoutes(GetRoutesFilterModel model);
         Task<ServiceResponse<GetRouteModel>> GetRoute(long id);
         Task<APIResponse> DeleteRoute(long id);
     }

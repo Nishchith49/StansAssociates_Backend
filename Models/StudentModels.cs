@@ -117,6 +117,9 @@ namespace StansAssociates_Backend.Models
     {
         [JsonProperty("session")]
         public string? Session { get; set; } 
+
+        [JsonProperty("schoolId")]
+        public long? SchoolId { get; set; }
     }
 
 
@@ -143,6 +146,9 @@ namespace StansAssociates_Backend.Models
     {
         [JsonProperty("studentId")]
         public long? StudentId { get; set; }
+
+        [JsonProperty("schoolId")]
+        public long? SchoolId { get; set; }
     }
 
 

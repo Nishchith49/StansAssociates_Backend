@@ -25,6 +25,13 @@ namespace StansAssociates_Backend.Models
     }
 
 
+    public class GetRoutesFilterModel : PagedResponseInput
+    {
+        [JsonProperty("schoolId")]
+        public long? SchoolId { get; set; }
+    }
+
+
     public class GetRouteModel: UpdateRouteModel
     {
         [JsonProperty("schoolName")]

@@ -108,6 +108,8 @@ namespace StansAssociates_Backend.Concrete.Services
             var staffs = await _context.Users
                                        .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.UserId)
                                        .Where(x => x.UserRoles.Any(x => x.RoleId == 2))
+                                       .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
+                                                   x.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                        .GroupBy(x => 1)
                                        .Select(x => new PagedResponseWithQuery<List<GetStaffModel>>
                                        {
@@ -276,6 +278,8 @@ namespace StansAssociates_Backend.Concrete.Services
             var teachers = await _context.Users
                                          .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.UserId)
                                          .Where(x => x.UserRoles.Any(x => x.RoleId == 3))
+                                         .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
+                                                     x.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                          .GroupBy(x => 1)
                                          .Select(x => new PagedResponseWithQuery<List<GetTeacherModel>>
                                          {
