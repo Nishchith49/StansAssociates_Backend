@@ -37,6 +37,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 return new APIResponse("This route already exists.", 400);
             var route = new Route
             {
+                SchoolId = model.SchoolId,
                 BusNo = model.BusNo,
                 BoardingPoint = model.BoardingPoint,
                 RouteCost = model.RouteCost,
