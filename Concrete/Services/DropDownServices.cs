@@ -62,9 +62,10 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
-        public async Task<List<DropDownModel>> GetCityDropDown()
+        public async Task<List<DropDownModel>> GetCityDropDown(long stateId)
         {
             var res = await _context.Cities
+                                    .Where(x => x.StateId == stateId)
                                     .Select(x => new DropDownModel
                                     {
                                         Label = x.CityName,
@@ -75,9 +76,10 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
-        public async Task<List<DropDownModel>> GetStateDropDown()
+        public async Task<List<DropDownModel>> GetStateDropDown(long countryId)
         {
             var res = await _context.States
+                                    .Where(x => x.CountryId == countryId)
                                     .Select(x => new DropDownModel
                                     {
                                         Label = x.StateName,

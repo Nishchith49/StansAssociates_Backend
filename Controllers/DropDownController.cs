@@ -42,16 +42,16 @@ namespace StansAssociates_Backend.Controllers
 
 
         [HttpGet("[action]")]
-        public async Task<List<DropDownModel>> GetCityDropDown()
+        public async Task<List<DropDownModel>> GetCityDropDown(long stateId)
         {
-            return await _dropDownServices.GetCityDropDown();
+            return await _dropDownServices.GetCityDropDown(stateId);
         }
 
 
         [HttpGet("[action]")]
-        public async Task<List<DropDownModel>> GetStateDropDown()
+        public async Task<List<DropDownModel>> GetStateDropDown(long countryId)
         {
-            return await _dropDownServices.GetStateDropDown();
+            return await _dropDownServices.GetStateDropDown(countryId);
         }
 
 
