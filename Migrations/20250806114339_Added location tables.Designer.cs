@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StansAssociates_Backend.Entities;
 
@@ -11,9 +12,11 @@ using StansAssociates_Backend.Entities;
 namespace StansAssociates_Backend.Migrations
 {
     [DbContext(typeof(StansassociatesAntonyContext))]
-    partial class StansassociatesAntonyContextModelSnapshot : ModelSnapshot
+    [Migration("20250806114339_Added location tables")]
+    partial class Addedlocationtables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,6 +40,7 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnName("city_name");
 
                     b.Property<string>("Image")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("image");
 
@@ -69,6 +73,7 @@ namespace StansAssociates_Backend.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Image")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("image");
 
@@ -282,6 +287,7 @@ namespace StansAssociates_Backend.Migrations
                         .HasColumnName("country_id");
 
                     b.Property<string>("Image")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("image");
 

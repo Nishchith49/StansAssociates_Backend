@@ -51,9 +51,9 @@ namespace StansAssociates_Backend.Concrete.Services
                 //TotalPaid = model.TotalPaid,
                 Street = model.Street,
                 Pincode = model.Pincode,
-                City = model.City,
-                State = model.State,
-                Country = model.Country,
+                CityId = model.CityId,
+                StateId = model.StateId,
+                CountryId = model.CountryId,
                 StudentImg = model.StudentImg != null ? (await _storageServices.UploadFile(S3Directories.StudentMedia, model.StudentImg)).Data : null,
                 Year = model.Year,
                 Remark = model.Remark,
@@ -88,9 +88,9 @@ namespace StansAssociates_Backend.Concrete.Services
             student.RouteId = model.RouteId;
             student.Street = model.Street;
             student.Pincode = model.Pincode;
-            student.City = model.City;
-            student.State = model.State;
-            student.Country = model.Country;
+            student.CityId = model.CityId;
+            student.StateId = model.StateId;
+            student.CountryId = model.CountryId;
             student.StudentImg = model.StudentImg != null ? (await _storageServices.UploadFile(S3Directories.StudentMedia, model.StudentImg)).Data : null;
             student.Year = model.Year;
             student.Remark = model.Remark;
@@ -147,9 +147,12 @@ namespace StansAssociates_Backend.Concrete.Services
                                                  TotalPaid = x.TotalPaid,
                                                  Street = x.Street,
                                                  Pincode = x.Pincode,
-                                                 City = x.City,
-                                                 State = x.State,
-                                                 Country = x.Country,
+                                                 CityId = x.CityId,
+                                                 CityName = x.City.CityName,
+                                                 StateId = x.StateId,
+                                                 StateName = x.State.StateName,
+                                                 CountryId = x.CountryId,
+                                                 CountryName = x.Country.Name,
                                                  StudentImg = x.StudentImg,
                                                  Year = x.Year,
                                                  Remark = x.Remark,
@@ -195,9 +198,12 @@ namespace StansAssociates_Backend.Concrete.Services
                                             TotalPaid = x.TotalPaid,
                                             Street = x.Street,
                                             Pincode = x.Pincode,
-                                            City = x.City,
-                                            State = x.State,
-                                            Country = x.Country,
+                                            CityId = x.CityId,
+                                            CityName = x.City.CityName,
+                                            StateId = x.StateId,
+                                            StateName = x.State.StateName,
+                                            CountryId = x.CountryId,
+                                            CountryName = x.Country.Name,
                                             StudentImg = x.StudentImg,
                                             Year = x.Year,
                                             Remark = x.Remark,

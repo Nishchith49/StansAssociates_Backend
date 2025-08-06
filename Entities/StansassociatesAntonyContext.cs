@@ -20,6 +20,9 @@ public partial class StansassociatesAntonyContext : DbContext
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     public virtual DbSet<Module> Modules { get; set; }
     public virtual DbSet<TeamPermission> TeamPermissions { get; set; }
+    public virtual DbSet<Country> Countries { get; set; }
+    public virtual DbSet<State> States { get; set; }
+    public virtual DbSet<City> Cities { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

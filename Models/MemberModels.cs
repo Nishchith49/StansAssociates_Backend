@@ -25,14 +25,14 @@ namespace StansAssociates_Backend.Models
         [JsonProperty("pincode")]
         public string Pincode { get; set; }
 
-        [JsonProperty("city")]
-        public string City { get; set; }
+        [JsonProperty("cityId")]
+        public long CityId { get; set; }
 
-        [JsonProperty("state")]
-        public string State { get; set; }
+        [JsonProperty("stateId")]
+        public long StateId { get; set; }
 
-        [JsonProperty("country")]
-        public string Country { get; set; }
+        [JsonProperty("countryId")]
+        public long CountryId { get; set; }
 
         [JsonProperty("profilePicture")]
         public string? ProfilePicture { get; set; }
@@ -66,6 +66,15 @@ namespace StansAssociates_Backend.Models
     {
         [JsonProperty("schoolName")]
         public string SchoolName { get; set; }
+
+        [JsonProperty("cityName")]
+        public string CityName { get; set; }
+
+        [JsonProperty("stateName")]
+        public string StateName { get; set; }
+
+        [JsonProperty("countryName")]
+        public string CountryName { get; set; }
 
         [JsonProperty("isActive")]
         public bool IsActive { get; set; }

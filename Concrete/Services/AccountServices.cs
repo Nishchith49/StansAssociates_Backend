@@ -215,9 +215,12 @@ namespace StansAssociates_Backend.Concrete.Services
                                          Gender = x.Gender,
                                          DOB = x.DOB,
                                          Street = x.Street,
-                                         City = x.City,
-                                         State = x.State,
-                                         Country = x.Country,
+                                         CityId = x.CityId,
+                                         CityName = x.City.CityName,
+                                         StateId = x.StateId,
+                                         StateName = x.State.StateName,
+                                         CountryId = x.CountryId,
+                                         CountryName = x.Country.Name,
                                          Pincode = x.Pincode,
                                          ProfilePicture = x.ProfilePicture,
                                          IsPasswordSet = x.Password != null
@@ -236,9 +239,9 @@ namespace StansAssociates_Backend.Concrete.Services
             user.Gender = model.Gender;
             user.DOB = model.DOB;
             user.Street = model.Street;
-            user.City = model.City;
-            user.State = model.State;
-            user.Country = model.Country;
+            user.CityId = model.CityId;
+            user.StateId = model.StateId;
+            user.CountryId = model.CountryId;
             user.Pincode = model.Pincode;
             user.ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? (await _storageServices.UploadFile(S3Directories.ProfileMedia, model.ProfilePicture)).Data : string.Empty;
             _context.Update(user);

@@ -1,6 +1,4 @@
-﻿using JobPortal.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StansAssociates_Backend.Entities
 {

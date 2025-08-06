@@ -39,5 +39,33 @@ namespace StansAssociates_Backend.Controllers
         {
             return await _dropDownServices.GetSchoolDropDown();
         }
+
+
+        [HttpGet("[action]")]
+        public async Task<List<DropDownModel>> GetCityDropDown()
+        {
+            return await _dropDownServices.GetCityDropDown();
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<List<DropDownModel>> GetStateDropDown()
+        {
+            return await _dropDownServices.GetStateDropDown();
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<List<DropDownModel>> GetCountryDropDown()
+        {
+            return await _dropDownServices.GetCountryDropDown();
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<APIResponse> InsertIndiaData()
+        {
+            return await _dropDownServices.InsertIndiaData();
+        }
     }
 }

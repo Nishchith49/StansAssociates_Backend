@@ -1,6 +1,4 @@
-﻿using JobPortal.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StansAssociates_Backend.Entities
 {
@@ -71,14 +69,26 @@ namespace StansAssociates_Backend.Entities
         [Column("pincode")]
         public string? Pincode { get; set; }
 
-        [Column("city")]
-        public string? City { get; set; }
+        [Column("city_id")]
+        public long? CityId { get; set; }
 
-        [Column("state")]
-        public string? State { get; set; }
+        [ForeignKey(nameof(CityId))]
+        [InverseProperty(nameof(City.Students))]
+        public City City { get; set; }
 
-        [Column("country")]
-        public string? Country { get; set; }
+        [Column("state_id")]
+        public long? StateId { get; set; }
+
+        [ForeignKey(nameof(StateId))]
+        [InverseProperty(nameof(State.Students))]
+        public State State { get; set; }
+
+        [Column("country_id")]
+        public long? CountryId { get; set; }
+
+        [ForeignKey(nameof(CountryId))]
+        [InverseProperty(nameof(Country.Students))]
+        public Country Country { get; set; }
 
         [Column("student_img")]
         public string? StudentImg { get; set; }
