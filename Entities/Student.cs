@@ -91,7 +91,7 @@ namespace StansAssociates_Backend.Entities
         public Country Country { get; set; }
 
         [Column("student_img")]
-        public string? StudentImg { get; set; }
+        public byte[]? StudentImg { get; set; }
 
         [Column("year")]
         public int Year { get; set; }

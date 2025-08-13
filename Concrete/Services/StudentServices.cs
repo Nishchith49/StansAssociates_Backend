@@ -54,7 +54,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 CityId = model.CityId,
                 StateId = model.StateId,
                 CountryId = model.CountryId,
-                StudentImg = model.StudentImg != null ? (await _storageServices.UploadFile(S3Directories.StudentMedia, model.StudentImg)).Data : null,
+                StudentImg = !string.IsNullOrWhiteSpace(model.StudentImg) ? Convert.FromBase64String(model.StudentImg) : null,
                 Year = model.Year,
                 Remark = model.Remark,
                 DOA = model.DOA
@@ -91,7 +91,7 @@ namespace StansAssociates_Backend.Concrete.Services
             student.CityId = model.CityId;
             student.StateId = model.StateId;
             student.CountryId = model.CountryId;
-            student.StudentImg = model.StudentImg != null ? (await _storageServices.UploadFile(S3Directories.StudentMedia, model.StudentImg)).Data : null;
+            student.StudentImg = !string.IsNullOrWhiteSpace(model.StudentImg) ? Convert.FromBase64String(model.StudentImg) : null;
             student.Year = model.Year;
             student.Remark = model.Remark;
             student.DOA = model.DOA;
@@ -153,7 +153,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                  StateName = x.State.StateName,
                                                  CountryId = x.CountryId,
                                                  CountryName = x.Country.Name,
-                                                 StudentImg = x.StudentImg,
+                                                 StudentImg = x.StudentImg != null ? Convert.ToBase64String(x.StudentImg) : null,
                                                  Year = x.Year,
                                                  Remark = x.Remark,
                                                  DOA = x.DOA,
@@ -204,7 +204,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                             StateName = x.State.StateName,
                                             CountryId = x.CountryId,
                                             CountryName = x.Country.Name,
-                                            StudentImg = x.StudentImg,
+                                            StudentImg = x.StudentImg != null ? Convert.ToBase64String(x.StudentImg) : null,
                                             Year = x.Year,
                                             Remark = x.Remark,
                                             DOA = x.DOA,

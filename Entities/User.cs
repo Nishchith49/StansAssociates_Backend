@@ -58,7 +58,7 @@ namespace StansAssociates_Backend.Entities
         public string Pincode { get; set; }
 
         [Column("Profile_picture")]
-        public string? ProfilePicture { get; set; }
+        public byte[]? ProfilePicture { get; set; }
 
         [Column("password")]
         public string? Password { get; set; }

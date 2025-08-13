@@ -56,7 +56,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 CityId = model.CityId,
                 StateId = model.StateId,
                 CountryId = model.CountryId,
-                ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? (await _storageServices.UploadFile(S3Directories.ProfileMedia, model.ProfilePicture)).Data : null,
+                ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? Convert.FromBase64String(model.ProfilePicture) : null,
                 Password = Encipher(model.Password),
                 UserRoles = new List<UserRole>
                 {
@@ -87,7 +87,7 @@ namespace StansAssociates_Backend.Concrete.Services
             school.Pincode = model.Pincode;
             school.StateId = model.StateId;
             school.CountryId = model.CountryId;
-            school.ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? (await _storageServices.UploadFile(S3Directories.ProfileMedia, model.ProfilePicture)).Data : null;
+            school.ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? Convert.FromBase64String(model.ProfilePicture) : null;
             school.Password = Encipher(model.Password);
             school.UpdatedDate = DateTime.Now;
             _context.Update(school);
@@ -122,7 +122,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                 Pincode = x.Pincode,
                                                 Password = Decipher(x.Password),
                                                 IsActive = x.IsActive,
-                                                ProfilePicture = x.ProfilePicture,
+                                                ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
                                                 CreatedDate = x.CreatedDate,
                                                 UpdatedDate = x.UpdatedDate
                                             })
@@ -156,7 +156,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                            Pincode = x.Pincode,
                                            Password = Decipher(x.Password),
                                            IsActive = x.IsActive,
-                                           ProfilePicture = x.ProfilePicture,
+                                           ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
                                            CreatedDate = x.CreatedDate,
                                            UpdatedDate = x.UpdatedDate
                                        })

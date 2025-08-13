@@ -58,7 +58,7 @@ namespace StansAssociates_Backend.Entities
                     StateId = 1,
                     CountryId = 1,
                     Pincode = "",
-                    ProfilePicture = "",
+                    ProfilePicture = null,
                     CreatedDate = date,
                     UpdatedDate = date
                 }

@@ -42,7 +42,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 CityId = model.CityId,
                 StateId = model.StateId,
                 CountryId = model.CountryId,
-                ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? (await _storageServices.UploadFile(S3Directories.ProfileMedia, model.ProfilePicture)).Data : null,
+                ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? Convert.FromBase64String(model.ProfilePicture) : null,
                 Password = Encipher(model.Password),
                 UserRoles = new List<UserRole>
                 {
@@ -75,7 +75,7 @@ namespace StansAssociates_Backend.Concrete.Services
             staff.Pincode = model.Pincode;
             staff.StateId = model.StateId;
             staff.CountryId = model.CountryId;
-            staff.ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? (await _storageServices.UploadFile(S3Directories.ProfileMedia, model.ProfilePicture)).Data : null;
+            staff.ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? Convert.FromBase64String(model.ProfilePicture) : null;
             staff.Password = Encipher(model.Password);
             staff.UpdatedDate = DateTime.Now;
             _context.Update(staff);
@@ -133,7 +133,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                Password = Decipher(x.Password),
                                                SchoolName = x.School.Name,
                                                IsActive = x.IsActive,
-                                               ProfilePicture = x.ProfilePicture,
+                                               ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
                                                CreatedDate = x.CreatedDate,
                                                UpdatedDate = x.UpdatedDate,
                                                Permissions = _context.Modules
@@ -181,7 +181,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                           Password = Decipher(x.Password),
                                           SchoolName = x.School.Name,
                                           IsActive = x.IsActive,
-                                          ProfilePicture = x.ProfilePicture,
+                                          ProfilePicture = Convert.ToBase64String(x.ProfilePicture),
                                           CreatedDate = x.CreatedDate,
                                           UpdatedDate = x.UpdatedDate,
                                           Permissions = _context.Modules
@@ -237,7 +237,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 CityId = model.CityId,
                 StateId = model.StateId,
                 CountryId = model.CountryId,
-                ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? (await _storageServices.UploadFile(S3Directories.ProfileMedia, model.ProfilePicture)).Data : null,
+                ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? Convert.FromBase64String(model.ProfilePicture) : null,
                 //Password = Encipher(model.Password),
                 UserRoles = new List<UserRole>
                 {
@@ -270,7 +270,7 @@ namespace StansAssociates_Backend.Concrete.Services
             teacher.Pincode = model.Pincode;
             teacher.StateId = model.StateId;
             teacher.CountryId = model.CountryId;
-            teacher.ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? (await _storageServices.UploadFile(S3Directories.ProfileMedia, model.ProfilePicture)).Data : null;
+            teacher.ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? Convert.FromBase64String(model.ProfilePicture) : null;
             //teacher.Password = Encipher(model.Password);
             teacher.UpdatedDate = DateTime.Now;
             _context.Update(teacher);
@@ -309,7 +309,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                  //Password = Decipher(x.Password),
                                                  IsActive = x.IsActive,
                                                  SchoolName = x.School.Name,
-                                                 ProfilePicture = x.ProfilePicture,
+                                                 ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
                                                  CreatedDate = x.CreatedDate,
                                                  UpdatedDate = x.UpdatedDate,
                                                  Permissions = _context.Modules
@@ -356,7 +356,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                             Pincode = x.Pincode,
                                             //Password = Decipher(x.Password),
                                             IsActive = x.IsActive,
-                                            ProfilePicture = x.ProfilePicture,
+                                            ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
                                             CreatedDate = x.CreatedDate,
                                             UpdatedDate = x.UpdatedDate,
                                             Permissions = _context.Modules

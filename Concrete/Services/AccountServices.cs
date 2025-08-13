@@ -95,7 +95,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 EmailId = user.EmailId,
                 UserName = $"{user.Name}",
                 PhoneNumber = user.PhoneNumber,
-                ProfilePicture = user.ProfilePicture,
+                ProfilePicture = user.ProfilePicture != null ? Convert.ToBase64String(user.ProfilePicture) : null,
                 Permissions = permissions
             };
             return new(ResponseConstants.LoginSuccess, 200, response);
@@ -222,7 +222,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                          CountryId = x.CountryId,
                                          CountryName = x.Country.Name,
                                          Pincode = x.Pincode,
-                                         ProfilePicture = x.ProfilePicture,
+                                         ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
                                          IsPasswordSet = x.Password != null
                                      })
                                      .FirstOrDefaultAsync();
@@ -243,7 +243,7 @@ namespace StansAssociates_Backend.Concrete.Services
             user.StateId = model.StateId;
             user.CountryId = model.CountryId;
             user.Pincode = model.Pincode;
-            user.ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? (await _storageServices.UploadFile(S3Directories.ProfileMedia, model.ProfilePicture)).Data : string.Empty;
+            user.ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? Convert.FromBase64String(model.ProfilePicture) : null;
             _context.Update(user);
             await _context.SaveChangesAsync();
             return new(ResponseConstants.Success, 200, (await GetUserProfile()).Data);
