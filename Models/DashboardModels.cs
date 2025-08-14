@@ -19,5 +19,8 @@ namespace StansAssociates_Backend.Models
 
         [JsonProperty("totalEarningsThisYear")]
         public decimal TotalEarningsThisYear { get; set; }
+
+        [JsonProperty("totalSchools")]
+        public long TotalSchools { get; set; }
     }
 }

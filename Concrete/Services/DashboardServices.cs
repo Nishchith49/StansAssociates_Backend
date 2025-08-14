@@ -41,6 +41,10 @@ namespace StansAssociates_Backend.Concrete.Services
                                                       .Where(x => isAdmin || x.Student.SchoolId == schoolId)
                                                       .Where(x => x.PaidDate.Year == DateTime.Now.Year)
                                                       .SumAsync(x => x.Amount),
+                TotalSchools = await _context.Users
+                                             .Where(x => isAdmin)
+                                             .Where(x => x.UserRoles.Any(x => x.RoleId == 4))
+                                             .CountAsync(),
             };
             return new(ResponseConstants.Success, 200, dashboard);
         }
