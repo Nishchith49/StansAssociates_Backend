@@ -310,7 +310,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                                             .ToLower()
                                                                             .Replace(" ", string.Empty)));
             if (sessionExists)
-                return new APIResponse("This session name already exists.", 400);
+                return new APIResponse("This academic year already exists.", 400);
             var session = new Session
             {
                 Name = model.Name
