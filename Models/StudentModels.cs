@@ -119,6 +119,9 @@ namespace StansAssociates_Backend.Models
 
         [JsonProperty("updatedDate")]
         public DateTime UpdatedDate { get; set; }
+
+        [JsonProperty("fees")]
+        public List<GetStudentFeeModel> Fees { get; set; }
     }
 
 
@@ -220,6 +223,43 @@ namespace StansAssociates_Backend.Models
 
         [JsonProperty("fees")]
         public List<GetStudentFeeModel> Fees { get; set; }
+    }
+
+
+    public class GetStudentFeesModel : GetStudentFeeModel
+    {
+        [JsonProperty("studentId")]
+        public long StudentId { get; set; }
+
+        [JsonProperty("fName")]
+        public string FName { get; set; }
+
+        [JsonProperty("lName")]
+        public string? LName { get; set; }
+
+        [JsonProperty("fatherName")]
+        public string FatherName { get; set; }
+
+        [JsonProperty("admissionNo")]
+        public string AdmissionNo { get; set; }
+
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+
+        [JsonProperty("class")]
+        public string Class { get; set; }
+
+        [JsonProperty("section")]
+        public string Section { get; set; }
+
+        [JsonProperty("totalAmount")]
+        public decimal TotalAmount { get; set; }
+
+        [JsonProperty("paid")]
+        public decimal Paid { get; set; }
+
+        [JsonProperty("due")]
+        public decimal Due { get; set; }
     }
 
 

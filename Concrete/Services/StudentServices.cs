@@ -159,7 +159,18 @@ namespace StansAssociates_Backend.Concrete.Services
                                                  DOA = x.DOA,
                                                  IsActive = x.IsActive,
                                                  CreatedDate = x.CreatedDate,
-                                                 UpdatedDate = x.UpdatedDate
+                                                 UpdatedDate = x.UpdatedDate,
+                                                 Fees = x.StudentFeesHistories
+                                                         .Select(x => new GetStudentFeeModel
+                                                         {
+                                                             Id = x.Id,
+                                                             Amount = x.Amount,
+                                                             PaidMode = x.PaidMode,
+                                                             PaidDate = x.PaidDate,
+                                                             Comment = x.Comment,
+                                                             CreatedDate = x.CreatedDate
+                                                         })
+                                                         .ToList()
                                              })
                                              .Skip(model.PageSize * model.PageIndex)
                                              .Take(model.PageSize)
@@ -210,7 +221,18 @@ namespace StansAssociates_Backend.Concrete.Services
                                             DOA = x.DOA,
                                             IsActive = x.IsActive,
                                             CreatedDate = x.CreatedDate,
-                                            UpdatedDate = x.UpdatedDate
+                                            UpdatedDate = x.UpdatedDate,
+                                            Fees = x.StudentFeesHistories
+                                                    .Select(x => new GetStudentFeeModel
+                                                    {
+                                                        Id = x.Id,
+                                                        Amount = x.Amount,
+                                                        PaidMode = x.PaidMode,
+                                                        PaidDate = x.PaidDate,
+                                                        Comment = x.Comment,
+                                                        CreatedDate = x.CreatedDate
+                                                    })
+                                                    .ToList()
                                         })
                                         .FirstOrDefaultAsync();
             return new(ResponseConstants.Success, 200, student);
@@ -253,7 +275,7 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
-        public async Task<PagedResponse<List<GetStudentFeeDetailsModel>>> GetStudentFees(GetStudentFeesFilterModel model)
+        public async Task<PagedResponse<List<GetStudentFeeDetailsModel>>> GetStudentFeesWithDetails(GetStudentFeesFilterModel model)
         {
             var studentFees = await _context.Students
                                             .Where(x => model.StudentId == null || x.Id == model.StudentId)
@@ -290,6 +312,48 @@ namespace StansAssociates_Backend.Concrete.Services
                                                                 CreatedDate = x.CreatedDate
                                                             })
                                                             .ToList()
+                                                })
+                                                .Skip(model.PageSize * model.PageIndex)
+                                                .Take(model.PageSize)
+                                                .ToList()
+                                            })
+                                            .FirstOrDefaultAsync();
+            return new(ResponseConstants.Success, 200, studentFees?.Data, model.PageIndex, model.PageSize, studentFees?.TotalRecords ?? 0);
+        }
+
+
+        public async Task<PagedResponse<List<GetStudentFeesModel>>> GetStudentFees(GetStudentFeesFilterModel model)
+        {
+            var studentFees = await _context.StudentFeesHistories
+                                            .Where(x => model.StudentId == null || x.Id == model.StudentId)
+                                            .Where(x => model.SchoolId == null || x.Student.SchoolId == model.SchoolId)
+                                            .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
+                                                       (x.Student.FName + x.Student.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                        x.Student.AdmissionNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                        x.Student.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                            .GroupBy(x => 1)
+                                            .Select(x => new PagedResponseWithQuery<List<GetStudentFeesModel>>
+                                            {
+                                                TotalRecords = x.Count(),
+                                                Data = x.Select(x => new GetStudentFeesModel
+                                                {
+                                                    StudentId = x.Id,
+                                                    FName = x.Student.FName,
+                                                    LName = x.Student.LName,
+                                                    FatherName = x.Student.FatherName,
+                                                    AdmissionNo = x.Student.AdmissionNo,
+                                                    Phone = x.Student.Phone,
+                                                    Class = x.Student.Class,
+                                                    Section = x.Student.Section,
+                                                    TotalAmount = x.Student.Route.RouteCost,
+                                                    Paid = x.Student.TotalPaid,
+                                                    Due = x.Student.Route.RouteCost - x.Student.TotalPaid,
+                                                    Id = x.Id,
+                                                    Amount = x.Amount,
+                                                    PaidMode = x.PaidMode,
+                                                    PaidDate = x.PaidDate,
+                                                    Comment = x.Comment,
+                                                    CreatedDate = x.CreatedDate
                                                 })
                                                 .Skip(model.PageSize * model.PageIndex)
                                                 .Take(model.PageSize)

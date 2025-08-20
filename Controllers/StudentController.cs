@@ -62,7 +62,14 @@ namespace StansAssociates_Backend.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<PagedResponse<List<GetStudentFeeDetailsModel>>> GetStudentFees(GetStudentFeesFilterModel model)
+        public async Task<PagedResponse<List<GetStudentFeeDetailsModel>>> GetStudentFeesWithDetails(GetStudentFeesFilterModel model)
+        {
+            return await _studentServices.GetStudentFeesWithDetails(model);
+        }
+
+
+        [HttpPost("[action]")]
+        public async Task<PagedResponse<List<GetStudentFeesModel>>> GetStudentFees(GetStudentFeesFilterModel model)
         {
             return await _studentServices.GetStudentFees(model);
         }
