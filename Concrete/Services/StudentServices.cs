@@ -335,26 +335,33 @@ namespace StansAssociates_Backend.Concrete.Services
                                             .Select(x => new PagedResponseWithQuery<List<GetStudentFeesModel>>
                                             {
                                                 TotalRecords = x.Count(),
-                                                Data = x.Select(x => new GetStudentFeesModel
-                                                {
-                                                    StudentId = x.Id,
-                                                    FName = x.Student.FName,
-                                                    LName = x.Student.LName,
-                                                    FatherName = x.Student.FatherName,
-                                                    AdmissionNo = x.Student.AdmissionNo,
-                                                    Phone = x.Student.Phone,
-                                                    Class = x.Student.Class,
-                                                    Section = x.Student.Section,
-                                                    TotalAmount = x.Student.Route.RouteCost,
-                                                    Paid = x.Student.TotalPaid,
-                                                    Due = x.Student.Route.RouteCost - x.Student.TotalPaid,
-                                                    Id = x.Id,
-                                                    Amount = x.Amount,
-                                                    PaidMode = x.PaidMode,
-                                                    PaidDate = x.PaidDate,
-                                                    Comment = x.Comment,
-                                                    CreatedDate = x.CreatedDate
-                                                })
+                                                Data = x.OrderBy(x => x.PaidDate)
+                                                        .Select(x => new GetStudentFeesModel
+                                                        {
+                                                            StudentId = x.Id,
+                                                            FName = x.Student.FName,
+                                                            LName = x.Student.LName,
+                                                            FatherName = x.Student.FatherName,
+                                                            AdmissionNo = x.Student.AdmissionNo,
+                                                            Phone = x.Student.Phone,
+                                                            Class = x.Student.Class,
+                                                            Section = x.Student.Section,
+                                                            TotalAmount = x.Student.Route.RouteCost,
+                                                            Term = _context.StudentFeesHistories
+                                                                           .Count(s => s.StudentId == x.StudentId &&
+                                                                                      (s.PaidDate < x.PaidDate ||
+                                                                                      (s.PaidDate == x.PaidDate &&
+                                                                                      (s.CreatedDate < x.CreatedDate ||
+                                                                                      (s.CreatedDate == x.CreatedDate && s.Id <= x.Id))))),
+                                                            Paid = x.Student.TotalPaid,
+                                                            Due = x.Student.Route.RouteCost - x.Student.TotalPaid,
+                                                            Id = x.Id,
+                                                            Amount = x.Amount,
+                                                            PaidMode = x.PaidMode,
+                                                            PaidDate = x.PaidDate,
+                                                            Comment = x.Comment,
+                                                            CreatedDate = x.CreatedDate
+                                                        })
                                                 .Skip(model.PageSize * model.PageIndex)
                                                 .Take(model.PageSize)
                                                 .ToList()

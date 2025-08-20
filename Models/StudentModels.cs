@@ -255,6 +255,9 @@ namespace StansAssociates_Backend.Models
         [JsonProperty("totalAmount")]
         public decimal TotalAmount { get; set; }
 
+        [JsonProperty("term")]
+        public int Term { get; set; }
+
         [JsonProperty("paid")]
         public decimal Paid { get; set; }
 
