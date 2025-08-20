@@ -44,7 +44,6 @@ namespace StansAssociates_Backend.Concrete.Services
                                                   .Equals(model.Email
                                                                .ToLower()
                                                                .Replace(" ", string.Empty)))
-                                     .Where(x => x.UserRoles.Any(a => a.RoleId == model.RoleId))
                                      .FirstOrDefaultAsync();
             if (user == null)
                 return new(ResponseConstants.UserNotExists, 401);

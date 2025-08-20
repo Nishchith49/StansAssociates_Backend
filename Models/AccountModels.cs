@@ -40,9 +40,9 @@ namespace StansAssociates_Backend.Models
     {
         [JsonProperty("password")]
         public string Password { get; set; }
-
-        [JsonProperty("roleId")]
-        public long RoleId { get; set; } = 2;
+            
+        //[JsonProperty("roleId")]
+        //public long RoleId { get; set; } = 2;
     }
 
 
