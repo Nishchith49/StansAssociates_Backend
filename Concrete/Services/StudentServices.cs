@@ -33,7 +33,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 return new("A student with this admission number already exists.", 400);
             var student = new Student
             {
-                SchoolId = _currentUser.UserId,
+                SchoolId = model.SchoolId,
                 Affiliation = model.Affiliation,
                 AdmissionNo = model.AdmissionNo,
                 RollNo = model.RollNo,
@@ -72,6 +72,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                         .FirstOrDefaultAsync();
             if (student == null)
                 return new(ResponseConstants.InvalidId, 400);
+            student.SchoolId = model.SchoolId;
             student.Affiliation = model.Affiliation;
             student.AdmissionNo = model.AdmissionNo;
             student.RollNo = model.RollNo;
@@ -105,7 +106,7 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<PagedResponse<List<GetStudentModel>>> GetStudents(GetStudentsFilterModel model)
         {
             var students = await _context.Students
-                                         .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.UserId)
+                                         .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.SchoolId)
                                          .Where(x => model.SchoolId == null || x.SchoolId == model.SchoolId)
                                          .Where(x => string.IsNullOrWhiteSpace(model.Session) ||
                                                      x.Year
@@ -126,6 +127,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                              Data = x.Select(x => new GetStudentModel
                                              {
                                                  Id = x.Id,
+                                                 SchoolId = x.SchoolId,
                                                  SchoolName = x.School.Name,
                                                  Affiliation = x.Affiliation,
                                                  AdmissionNo = x.AdmissionNo,
@@ -188,6 +190,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                         .Select(x => new GetStudentModel
                                         {
                                             Id = x.Id,
+                                            SchoolId = x.SchoolId,
                                             SchoolName = x.School.Name,
                                             Affiliation = x.Affiliation,
                                             AdmissionNo = x.AdmissionNo,
@@ -278,6 +281,7 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<PagedResponse<List<GetStudentFeeDetailsModel>>> GetStudentFeesWithDetails(GetStudentFeesFilterModel model)
         {
             var studentFees = await _context.Students
+                                            .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.SchoolId)
                                             .Where(x => model.StudentId == null || x.Id == model.StudentId)
                                             .Where(x => model.SchoolId == null || x.SchoolId == model.SchoolId)
                                             .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
@@ -325,7 +329,8 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<PagedResponse<List<GetStudentFeesModel>>> GetStudentFees(GetStudentFeesFilterModel model)
         {
             var studentFees = await _context.StudentFeesHistories
-                                            .Where(x => model.StudentId == null || x.Id == model.StudentId)
+                                            .Where(x => _currentUser.IsAdmin || x.Student.SchoolId == _currentUser.SchoolId)
+                                            .Where(x => model.StudentId == null || x.Id == model.StudentId)     
                                             .Where(x => model.SchoolId == null || x.Student.SchoolId == model.SchoolId)
                                             .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
                                                        (x.Student.FName + x.Student.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||

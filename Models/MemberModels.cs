@@ -4,6 +4,9 @@ namespace StansAssociates_Backend.Models
 {
     public class AddStaffModel
     {
+        [JsonProperty("schoolId")]
+        public long SchoolId { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
 

@@ -132,7 +132,8 @@ namespace StansAssociates_Backend.Concrete.Services
                     new(ClaimTypes.NameIdentifier, $"{appUser.Id}"),
                     new(ClaimTypes.OtherPhone,appUser.PhoneNumber ?? string.Empty),
                     new("roles", JsonConvert.SerializeObject(roles)),
-                    new("role_ids", JsonConvert.SerializeObject(roleIds))
+                    new("role_ids", JsonConvert.SerializeObject(roleIds)),
+                    new("school_id", JsonConvert.SerializeObject(appUser.SchoolId))
                 }),
                 Expires = DateTime.Now.AddYears(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

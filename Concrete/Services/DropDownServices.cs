@@ -19,10 +19,11 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
-        public async Task<List<RouteDropDownModel>> GetRouteDropDown()
+        public async Task<List<RouteDropDownModel>> GetRouteDropDown(long? schoolId)
         {
             var res = await _context.Routes
-                                    .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.UserId)
+                                    .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.SchoolId)
+                                    .Where(x => schoolId == null || x.SchoolId == schoolId)
                                     .Select(x => new RouteDropDownModel
                                     {
                                         SchoolName = x.School.Name,

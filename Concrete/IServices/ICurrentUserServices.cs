@@ -11,5 +11,6 @@
         string RoleType { get; }
         int UserId { get; }
         bool IsAdmin { get; }
+        int? SchoolId { get; }
     }
 }

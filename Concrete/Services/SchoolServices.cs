@@ -23,7 +23,7 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<APIResponse> AddSchool(AddSchoolModel model)
         {
             var schoolExists = await _context.Users
-                                             .Where(x => x.UserRoles.Any(x => x.RoleId == 4))
+                                             //.Where(x => x.UserRoles.Any(x => x.RoleId == 4))
                                              .Where(x => x.EmailId
                                                           .ToLower()
                                                           .Replace(" ", string.Empty)
@@ -40,7 +40,7 @@ namespace StansAssociates_Backend.Concrete.Services
             if (schoolExists != null)
             {
                 if (schoolExists.EmailId.ToLower().Replace(" ", "") == model.EmailId.ToLower().Replace(" ", ""))
-                    return new APIResponse("A school with this email already exists.", 400);
+                    return new APIResponse(ResponseConstants.EmailExists, 400);
 
                 if (schoolExists.Name.ToLower().Replace(" ", "") == model.Name.ToLower().Replace(" ", ""))
                     return new APIResponse("A school with this name already exists.", 400);
@@ -57,7 +57,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 StateId = model.StateId,
                 CountryId = model.CountryId,
                 ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? Convert.FromBase64String(model.ProfilePicture) : null,
-                Password = Encipher(model.Password),
+                //Password = Encipher(model.Password),
                 UserRoles = new List<UserRole>
                 {
                     new() {
@@ -88,7 +88,7 @@ namespace StansAssociates_Backend.Concrete.Services
             school.StateId = model.StateId;
             school.CountryId = model.CountryId;
             school.ProfilePicture = !string.IsNullOrWhiteSpace(model.ProfilePicture) ? Convert.FromBase64String(model.ProfilePicture) : null;
-            school.Password = Encipher(model.Password);
+            //school.Password = Encipher(model.Password);
             school.UpdatedDate = DateTime.Now;
             _context.Update(school);
             await _context.SaveChangesAsync();
@@ -120,7 +120,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                 CountryId = x.CountryId,
                                                 CountryName = x.Country.Name,
                                                 Pincode = x.Pincode,
-                                                Password = Decipher(x.Password),
+                                                //Password = Decipher(x.Password),
                                                 IsActive = x.IsActive,
                                                 ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
                                                 CreatedDate = x.CreatedDate,
@@ -154,7 +154,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                            CountryId = x.CountryId,
                                            CountryName = x.Country.Name,
                                            Pincode = x.Pincode,
-                                           Password = Decipher(x.Password),
+                                           //Password = Decipher(x.Password),
                                            IsActive = x.IsActive,
                                            ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
                                            CreatedDate = x.CreatedDate,

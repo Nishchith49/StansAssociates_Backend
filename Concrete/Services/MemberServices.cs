@@ -23,15 +23,21 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<APIResponse> AddStaff(AddStaffModel model)
         {
             bool staffExists = await _context.Users
-                                             .Where(x => x.UserRoles.Any(x => x.RoleId == 2))
-                                             .AnyAsync(x => x.EmailId == model.EmailId || x.PhoneNumber == model.PhoneNumber);
+                                             //.Where(x => x.UserRoles.Any(x => x.RoleId == 2))
+                                             .AnyAsync(x => x.EmailId
+                                                             .ToLower()
+                                                             .Replace("", string.Empty)
+                                                             .Equals(model.EmailId
+                                                                          .ToLower()
+                                                                          .Replace(" ", string.Empty)) ||
+                                                            x.PhoneNumber.Trim() == model.PhoneNumber.Trim());
 
             if (staffExists)
-                return new APIResponse("A staff with this email or phone number already exists.", 400);
+                return new APIResponse("Email or phone number already exists.", 400);
 
             var staff = new User
             {
-                SchoolId = _currentUser.UserId,
+                SchoolId = model.SchoolId,
                 Name = model.Name,
                 EmailId = model.EmailId,
                 PhoneNumber = model.PhoneNumber,
@@ -65,6 +71,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                       .FirstOrDefaultAsync();
             if (staff == null)
                 return new(ResponseConstants.InvalidId, 400);
+            staff.SchoolId = model.SchoolId;
             staff.Name = model.Name;
             staff.EmailId = model.EmailId;
             staff.PhoneNumber = model.PhoneNumber;
@@ -106,7 +113,7 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<PagedResponse<List<GetStaffModel>>> GetStaffs(PagedResponseInput model)
         {
             var staffs = await _context.Users
-                                       .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.UserId)
+                                       .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.SchoolId)
                                        .Where(x => x.UserRoles.Any(x => x.RoleId == 2))
                                        .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
                                                    x.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
@@ -131,6 +138,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                CountryName = x.Country.Name,
                                                Pincode = x.Pincode,
                                                Password = Decipher(x.Password),
+                                               SchoolId = x.SchoolId ?? 0,
                                                SchoolName = x.School.Name,
                                                IsActive = x.IsActive,
                                                ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
@@ -179,9 +187,10 @@ namespace StansAssociates_Backend.Concrete.Services
                                           CountryName = x.Country.Name,
                                           Pincode = x.Pincode,
                                           Password = Decipher(x.Password),
+                                          SchoolId = x.SchoolId ?? 0,
                                           SchoolName = x.School.Name,
                                           IsActive = x.IsActive,
-                                          ProfilePicture = Convert.ToBase64String(x.ProfilePicture),
+                                          ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
                                           CreatedDate = x.CreatedDate,
                                           UpdatedDate = x.UpdatedDate,
                                           Permissions = _context.Modules
@@ -218,15 +227,21 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<APIResponse> AddTeacher(AddTeacherModel model)
         {
             var teacherExists = await _context.Users
-                                              .Where(x => x.UserRoles.Any(x => x.RoleId == 3))
-                                              .AnyAsync(x => x.EmailId == model.EmailId || x.PhoneNumber == model.PhoneNumber);
+                                              //.Where(x => x.UserRoles.Any(x => x.RoleId == 3))
+                                              .AnyAsync(x => x.EmailId
+                                                              .ToLower()
+                                                              .Replace("", string.Empty)
+                                                              .Equals(model.EmailId
+                                                                           .ToLower()
+                                                                           .Replace(" ", string.Empty)) ||
+                                                             x.PhoneNumber.Trim() == model.PhoneNumber.Trim());
 
             if (teacherExists)
-                return new APIResponse("A teacher with this email or phone number already exists.", 400);
+                return new APIResponse("Email or phone number already exists.", 400);
 
             var teacher = new User
             {
-                SchoolId = _currentUser.UserId,
+                SchoolId = model.SchoolId,
                 Name = model.Name,
                 EmailId = model.EmailId,
                 PhoneNumber = model.PhoneNumber,
@@ -260,6 +275,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                         .FirstOrDefaultAsync();
             if (teacher == null)
                 return new(ResponseConstants.InvalidId, 400);
+            teacher.SchoolId = model.SchoolId;
             teacher.Name = model.Name;
             teacher.EmailId = model.EmailId;
             teacher.PhoneNumber = model.PhoneNumber;
@@ -282,7 +298,7 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<PagedResponse<List<GetTeacherModel>>> GetTeachers(PagedResponseInput model)
         {
             var teachers = await _context.Users
-                                         .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.UserId)
+                                         .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.SchoolId)
                                          .Where(x => x.UserRoles.Any(x => x.RoleId == 3))
                                          .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
                                                      x.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
@@ -308,6 +324,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                  Pincode = x.Pincode,
                                                  //Password = Decipher(x.Password),
                                                  IsActive = x.IsActive,
+                                                 SchoolId = x.SchoolId ?? 0,
                                                  SchoolName = x.School.Name,
                                                  ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
                                                  CreatedDate = x.CreatedDate,
@@ -356,6 +373,8 @@ namespace StansAssociates_Backend.Concrete.Services
                                             Pincode = x.Pincode,
                                             //Password = Decipher(x.Password),
                                             IsActive = x.IsActive,
+                                            SchoolId = x.SchoolId ?? 0,
+                                            SchoolName = x.School.Name,
                                             ProfilePicture = x.ProfilePicture != null ? Convert.ToBase64String(x.ProfilePicture) : null,
                                             CreatedDate = x.CreatedDate,
                                             UpdatedDate = x.UpdatedDate,
@@ -369,7 +388,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                                       CanEdit = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanEdit).FirstOrDefault(),
                                                                       CanDelete = x.TeamPermissions.Where(b => b.ModuleId == a.Id).Select(x => x.CanDelete).FirstOrDefault()
                                                                   })
-                                                                  .ToList(),
+                                                                  .ToList()
                                         })
                                         .FirstOrDefaultAsync();
             return new(ResponseConstants.Success, 200, teacher);

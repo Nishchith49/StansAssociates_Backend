@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StansAssociates_Backend.Concrete.IServices;
-using StansAssociates_Backend.Concrete.Services;
 using StansAssociates_Backend.Models;
 
 namespace StansAssociates_Backend.Controllers
@@ -21,9 +19,9 @@ namespace StansAssociates_Backend.Controllers
 
         [Authorize]
         [HttpGet("[action]")]
-        public async Task<List<RouteDropDownModel>> GetRouteDropDown()
+        public async Task<List<RouteDropDownModel>> GetRouteDropDown(long? schoolId)
         {
-            return await _dropDownServices.GetRouteDropDown();
+            return await _dropDownServices.GetRouteDropDown(schoolId);
         }
 
 

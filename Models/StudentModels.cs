@@ -4,6 +4,9 @@ namespace StansAssociates_Backend.Models
 {
     public class AddStudentModel
     {
+        [JsonProperty("schoolId")]
+        public long SchoolId { get; set; }
+
         [JsonProperty("affiliation")]
         public string Affiliation { get; set; }
 
@@ -128,7 +131,7 @@ namespace StansAssociates_Backend.Models
     public class GetStudentsFilterModel : PagedResponseInput
     {
         [JsonProperty("session")]
-        public string? Session { get; set; } 
+        public string? Session { get; set; }
 
         [JsonProperty("schoolId")]
         public long? SchoolId { get; set; }
@@ -154,7 +157,7 @@ namespace StansAssociates_Backend.Models
     }
 
 
-    public class GetStudentFeesFilterModel : PagedResponseInput 
+    public class GetStudentFeesFilterModel : PagedResponseInput
     {
         [JsonProperty("studentId")]
         public long? StudentId { get; set; }

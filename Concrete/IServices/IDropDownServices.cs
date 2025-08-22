@@ -4,7 +4,7 @@ namespace StansAssociates_Backend.Concrete.IServices
 {
     public interface IDropDownServices
     {
-        Task<List<RouteDropDownModel>> GetRouteDropDown();
+        Task<List<RouteDropDownModel>> GetRouteDropDown(long? schoolId);
         Task<List<DropDownModel>> GetModuleDropDown();
         Task<List<DropDownModel>> GetSchoolDropDown();
         Task<List<DropDownModel>> GetCityDropDown(long stateId);

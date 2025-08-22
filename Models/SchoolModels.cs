@@ -31,8 +31,8 @@ namespace StansAssociates_Backend.Models
         [JsonProperty("profilePicture")]
         public string? ProfilePicture { get; set; }
 
-        [JsonProperty("password")]
-        public string Password { get; set; }
+        //[JsonProperty("password")]
+        //public string Password { get; set; }
     }
 
 

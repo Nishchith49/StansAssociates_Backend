@@ -4,7 +4,7 @@ using StansAssociates_Backend.Entities;
 using StansAssociates_Backend.Global;
 using StansAssociates_Backend.Models;
 
-namespace StansAssociates_Backend.Concrete.Services
+namespace StansAssociates_Backend.Concrete.Services  
 {
     public class DashboardServices : IDashboardServices
     {
@@ -21,7 +21,7 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<ServiceResponse<GetDashboardModel>> GetDashboard()
         {
             var isAdmin = _currentUser.IsAdmin;
-            var schoolId = _currentUser.UserId;
+            var schoolId = _currentUser.SchoolId;
             var dashboard = new GetDashboardModel
             {
                 TotalStudents = await _context.Students
