@@ -66,7 +66,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 Year = model.Year,
                 Remark = model.Remark,
                 DOA = model.DOA,
-                Studentbysessions = new List<Studentbysession> 
+                Studentbysessions = new List<Studentbysession>
                 {
                     new()
                     {
@@ -180,6 +180,10 @@ namespace StansAssociates_Backend.Concrete.Services
                                                  CreatedDate = x.CreatedDate,
                                                  UpdatedDate = x.UpdatedDate,
                                                  Fees = x.StudentFeesHistories
+                                                         .Where(f => f.StudentbysessionId == x.Studentbysessions
+                                                                                              .OrderByDescending(x => x.SessionId)
+                                                                                              .Select(x => x.Id)
+                                                                                              .FirstOrDefault())
                                                          .Select(x => new GetStudentFeeModel
                                                          {
                                                              Id = x.Id,
@@ -366,6 +370,10 @@ namespace StansAssociates_Backend.Concrete.Services
                                                     Paid = x.TotalPaid,
                                                     Due = x.Route.RouteCost - x.TotalPaid,
                                                     Fees = x.StudentFeesHistories
+                                                            .Where(f => f.StudentbysessionId == x.Studentbysessions
+                                                                                                 .OrderByDescending(x => x.SessionId)
+                                                                                                 .Select(x => x.Id)
+                                                                                                 .FirstOrDefault())
                                                             .Select(x => new GetStudentFeeModel
                                                             {
                                                                 Id = x.Id,
@@ -397,6 +405,10 @@ namespace StansAssociates_Backend.Concrete.Services
                                                         x.Student.AdmissionNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
                                                         x.Student.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
                                                         x.Student.Phone.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                            .Where(x => x.StudentbysessionId == x.Student.Studentbysessions
+                                                                                 .OrderByDescending(x => x.SessionId)
+                                                                                 .Select(x => x.Id)
+                                                                                 .FirstOrDefault())
                                             .GroupBy(x => 1)
                                             .Select(x => new PagedResponseWithQuery<List<GetStudentFeesModel>>
                                             {
