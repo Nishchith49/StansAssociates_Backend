@@ -23,5 +23,12 @@ namespace StansAssociates_Backend.Entities
 
         [Column("paid_date", TypeName = "date")]
         public DateTime PaidDate { get; set; }
+
+        [Column("student_by_session_id")]
+        public long StudentbysessionId { get; set; }
+
+        [ForeignKey(nameof(StudentbysessionId))]
+        [InverseProperty(nameof(Studentbysession.StudentFeesHistories))]
+        public Studentbysession Studentbysession { get; set; }
     }
 }

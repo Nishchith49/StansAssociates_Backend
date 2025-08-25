@@ -29,6 +29,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                         SchoolName = x.School.Name,
                                         BusNo = x.BusNo,
                                         BoardingPoint = x.BoardingPoint,
+                                        RouteCost = x.RouteCost,
                                         Id = x.Id
                                     })
                                     .ToListAsync();

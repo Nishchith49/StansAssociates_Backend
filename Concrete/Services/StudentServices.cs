@@ -31,6 +31,14 @@ namespace StansAssociates_Backend.Concrete.Services
                                                                             .Replace(" ", string.Empty)));
             if (studentExists)
                 return new("A student with this admission number already exists.", 400);
+
+            var sessionId = await _context.Sessions
+                                          .Where(x => x.Name.Trim() == model.Year.ToString())
+                                          .Select(x => x.Id)
+                                          .FirstOrDefaultAsync();
+            if (sessionId == 0)
+                return new("Session for this year not found.", 400);
+
             var student = new Student
             {
                 SchoolId = model.SchoolId,
@@ -57,7 +65,15 @@ namespace StansAssociates_Backend.Concrete.Services
                 StudentImg = !string.IsNullOrWhiteSpace(model.StudentImg) ? Convert.FromBase64String(model.StudentImg) : null,
                 Year = model.Year,
                 Remark = model.Remark,
-                DOA = model.DOA
+                DOA = model.DOA,
+                Studentbysessions = new List<Studentbysession> 
+                {
+                    new()
+                    {
+                        Class = model.Class,
+                        SessionId = sessionId
+                    }
+                }
             };
             await _context.AddAsync(student);
             await _context.SaveChangesAsync();
@@ -119,7 +135,8 @@ namespace StansAssociates_Backend.Concrete.Services
                                          .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
                                                     (x.FName + x.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
                                                      x.AdmissionNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
-                                                     x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                                     x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.Phone.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                          .GroupBy(x => 1)
                                          .Select(x => new PagedResponseWithQuery<List<GetStudentModel>>
                                          {
@@ -259,17 +276,41 @@ namespace StansAssociates_Backend.Concrete.Services
         public async Task<APIResponse> AddStudentFee(AddStudentFeeModel model)
         {
             var student = await _context.Students
+                                        .Include(x => x.Studentbysessions)
                                         .Where(x => x.Id == model.StudentId)
                                         .FirstOrDefaultAsync();
             if (student == null)
                 return new(ResponseConstants.InvalidId, 400);
+
+            var studentBySessionId = student.Studentbysessions
+                                            .Where(x => x.Session.Name.Trim() == student.Year.ToString())
+                                            .Select(x => x.Id)
+                                            .FirstOrDefault();
+            if (studentBySessionId == 0)
+                return new("Student is not mapped to any session.", 400);
+
+            var termCount = await _context.StudentFeesHistories
+                                          .CountAsync(p => p.StudentbysessionId == studentBySessionId);
+
+            int nextTerm = termCount switch
+            {
+                0 => 1,
+                1 => 2,
+                2 => 3,
+                _ => -1
+            };
+
+            if (nextTerm == -1)
+                return new("All 3 Terms Payment Done!", 400);
+
             var studentFee = new StudentFeesHistory
             {
                 StudentId = model.StudentId,
                 Amount = model.Amount,
                 Comment = model.Comment,
                 PaidMode = model.PaidMode,
-                PaidDate = model.PaidDate
+                PaidDate = model.PaidDate,
+                StudentbysessionId = studentBySessionId
             };
             student.TotalPaid += model.Amount;
             await _context.AddAsync(studentFee);
@@ -287,13 +328,32 @@ namespace StansAssociates_Backend.Concrete.Services
                                             .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
                                                        (x.FName + x.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
                                                         x.AdmissionNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
-                                                        x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                                        x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                        x.Phone.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                             .GroupBy(x => 1)
                                             .Select(x => new PagedResponseWithQuery<List<GetStudentFeeDetailsModel>>
                                             {
                                                 TotalRecords = x.Count(),
                                                 Data = x.Select(x => new GetStudentFeeDetailsModel
                                                 {
+                                                    SchoolDetails = new GetSchoolModel
+                                                    {
+                                                        Id = x.SchoolId,
+                                                        Name = x.School.Name,
+                                                        EmailId = x.School.EmailId,
+                                                        PhoneNumber = x.School.PhoneNumber,
+                                                        Street = x.School.Street,
+                                                        CountryId = x.School.CountryId,
+                                                        CountryName = x.School.Country.Name,
+                                                        StateId = x.School.StateId,
+                                                        StateName = x.School.State.StateName,
+                                                        CityId = x.School.CityId,
+                                                        CityName = x.School.City.CityName,
+                                                        Pincode = x.School.Pincode,
+                                                        IsActive = x.School.IsActive,
+                                                        CreatedDate = x.School.CreatedDate,
+                                                        UpdatedDate = x.School.UpdatedDate
+                                                    },
                                                     StudentId = x.Id,
                                                     FName = x.FName,
                                                     LName = x.LName,
@@ -330,12 +390,13 @@ namespace StansAssociates_Backend.Concrete.Services
         {
             var studentFees = await _context.StudentFeesHistories
                                             .Where(x => _currentUser.IsAdmin || x.Student.SchoolId == _currentUser.SchoolId)
-                                            .Where(x => model.StudentId == null || x.Id == model.StudentId)     
+                                            .Where(x => model.StudentId == null || x.Id == model.StudentId)
                                             .Where(x => model.SchoolId == null || x.Student.SchoolId == model.SchoolId)
                                             .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
                                                        (x.Student.FName + x.Student.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
                                                         x.Student.AdmissionNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
-                                                        x.Student.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                                        x.Student.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                        x.Student.Phone.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                             .GroupBy(x => 1)
                                             .Select(x => new PagedResponseWithQuery<List<GetStudentFeesModel>>
                                             {
@@ -343,6 +404,24 @@ namespace StansAssociates_Backend.Concrete.Services
                                                 Data = x.OrderBy(x => x.PaidDate)
                                                         .Select(x => new GetStudentFeesModel
                                                         {
+                                                            SchoolDetails = new GetSchoolModel
+                                                            {
+                                                                Id = x.Student.SchoolId,
+                                                                Name = x.Student.School.Name,
+                                                                EmailId = x.Student.School.EmailId,
+                                                                PhoneNumber = x.Student.School.PhoneNumber,
+                                                                Street = x.Student.School.Street,
+                                                                CountryId = x.Student.School.CountryId,
+                                                                CountryName = x.Student.School.Country.Name,
+                                                                StateId = x.Student.School.StateId,
+                                                                StateName = x.Student.School.State.StateName,
+                                                                CityId = x.Student.School.CityId,
+                                                                CityName = x.Student.School.City.CityName,
+                                                                Pincode = x.Student.School.Pincode,
+                                                                IsActive = x.Student.School.IsActive,
+                                                                CreatedDate = x.Student.School.CreatedDate,
+                                                                UpdatedDate = x.Student.School.UpdatedDate
+                                                            },
                                                             StudentId = x.Id,
                                                             FName = x.Student.FName,
                                                             LName = x.Student.LName,

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StansAssociates_Backend.Entities;
 
@@ -11,9 +12,11 @@ using StansAssociates_Backend.Entities;
 namespace StansAssociates_Backend.Migrations
 {
     [DbContext(typeof(StansassociatesAntonyContext))]
-    partial class StansassociatesAntonyContextModelSnapshot : ModelSnapshot
+    [Migration("20250825093203_Added StudentbysessionId in StudentFeesHistory Table")]
+    partial class AddedStudentbysessionIdinStudentFeesHistoryTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

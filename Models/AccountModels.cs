@@ -75,6 +75,9 @@ namespace StansAssociates_Backend.Models
         [JsonProperty("profilePicture")]
         public string ProfilePicture { get; set; }
 
+        [JsonProperty("schoolId")]
+        public long? SchoolId { get; set; }
+
         [JsonProperty("permissions")]
         public List<GetTeamPermissions> Permissions { get; set; } = [];
     }

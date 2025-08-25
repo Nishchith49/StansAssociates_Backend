@@ -3,9 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StansAssociates_Backend.Entities
 {
-    [Table("studentbysession")]
+    [Table("student_by_session")]
     public partial class Studentbysession : PrimaryKey
     {
+        public Studentbysession()
+        {
+            StudentFeesHistories = new HashSet<StudentFeesHistory>();
+        }
+
         [Column("student_id")]
         public long StudentId { get; set; }
 
@@ -23,5 +28,8 @@ namespace StansAssociates_Backend.Entities
         [ForeignKey(nameof(SessionId))]
         [InverseProperty(nameof(Session.Studentbysessions))]
         public Session Session { get; set; }
+
+        [InverseProperty(nameof(StudentFeesHistory.Studentbysession))]
+        public virtual ICollection<StudentFeesHistory> StudentFeesHistories { get; set; }
     }
 }

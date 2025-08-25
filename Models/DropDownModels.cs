@@ -23,6 +23,9 @@ namespace StansAssociates_Backend.Models
         [JsonProperty("boardingPoint")]
         public string BoardingPoint { get; set; }
 
+        [JsonProperty("routeCost")]
+        public decimal RouteCost { get; set; }
+
         [JsonProperty("id")]
         public long Id { get; set; }
     }

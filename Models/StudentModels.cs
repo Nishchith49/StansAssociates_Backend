@@ -191,6 +191,9 @@ namespace StansAssociates_Backend.Models
 
     public class GetStudentFeeDetailsModel
     {
+        [JsonProperty("schoolDetails")]
+        public GetSchoolModel SchoolDetails { get; set; }
+
         [JsonProperty("studentId")]
         public long StudentId { get; set; }
 
@@ -231,6 +234,9 @@ namespace StansAssociates_Backend.Models
 
     public class GetStudentFeesModel : GetStudentFeeModel
     {
+        [JsonProperty("schoolDetails")]
+        public GetSchoolModel SchoolDetails { get; set; }
+
         [JsonProperty("studentId")]
         public long StudentId { get; set; }
 

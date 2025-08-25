@@ -94,6 +94,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 EmailId = user.EmailId,
                 UserName = $"{user.Name}",
                 PhoneNumber = user.PhoneNumber,
+                SchoolId = user?.SchoolId,
                 ProfilePicture = user.ProfilePicture != null ? Convert.ToBase64String(user.ProfilePicture) : null,
                 Permissions = permissions
             };

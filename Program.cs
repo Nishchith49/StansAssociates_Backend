@@ -87,7 +87,7 @@ builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", policyBuilder =>
     policyBuilder
         .AllowAnyMethod()
         .AllowAnyHeader()
-        .WithOrigins("http://localhost:4200", "https://localhost:4200", "http://13.201.150.140")
+        .WithOrigins("http://localhost:4200", "https://localhost:4200", "https://stanassociates.in")
         .SetIsOriginAllowedToAllowWildcardSubdomains()
         .AllowCredentials();
 }));
