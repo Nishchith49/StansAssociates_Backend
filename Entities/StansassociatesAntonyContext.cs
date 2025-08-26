@@ -30,7 +30,7 @@ public partial class StansassociatesAntonyContext : DbContext
     {
         modelBuilder.SeedData();
 
-        modelBuilder.Entity<Student>().HasQueryFilter(x => !x.IsDeleted && !x.School.IsDeleted && !x.Route.IsDeleted);
+        modelBuilder.Entity<Student>().HasQueryFilter(x => !x.IsDeleted && !x.School.IsDeleted);
         modelBuilder.Entity<StudentFeesHistory>().HasQueryFilter(x => !x.Student.IsDeleted && !x.Student.School.IsDeleted && !x.Student.Route.IsDeleted);
         modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDeleted);
         modelBuilder.Entity<Route>().HasQueryFilter(x => !x.IsDeleted && !x.School.IsDeleted);

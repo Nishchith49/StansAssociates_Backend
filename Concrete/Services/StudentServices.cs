@@ -281,6 +281,7 @@ namespace StansAssociates_Backend.Concrete.Services
         {
             var student = await _context.Students
                                         .Include(x => x.Studentbysessions)
+                                         .ThenInclude(x => x.Session)
                                         .Where(x => x.Id == model.StudentId)
                                         .FirstOrDefaultAsync();
             if (student == null)
@@ -398,7 +399,7 @@ namespace StansAssociates_Backend.Concrete.Services
         {
             var studentFees = await _context.StudentFeesHistories
                                             .Where(x => _currentUser.IsAdmin || x.Student.SchoolId == _currentUser.SchoolId)
-                                            .Where(x => model.StudentId == null || x.Id == model.StudentId)
+                                            .Where(x => model.StudentId == null || x.StudentId == model.StudentId)
                                             .Where(x => model.SchoolId == null || x.Student.SchoolId == model.SchoolId)
                                             .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
                                                        (x.Student.FName + x.Student.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
@@ -434,7 +435,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                                 CreatedDate = x.Student.School.CreatedDate,
                                                                 UpdatedDate = x.Student.School.UpdatedDate
                                                             },
-                                                            StudentId = x.Id,
+                                                            StudentId = x.StudentId,
                                                             FName = x.Student.FName,
                                                             LName = x.Student.LName,
                                                             FatherName = x.Student.FatherName,
@@ -444,6 +445,10 @@ namespace StansAssociates_Backend.Concrete.Services
                                                             Section = x.Student.Section,
                                                             TotalAmount = x.Student.Route.RouteCost,
                                                             Term = _context.StudentFeesHistories
+                                                                           .Where(x => x.StudentbysessionId == x.Student.Studentbysessions
+                                                                                                                .OrderByDescending(x => x.SessionId)
+                                                                                                                .Select(x => x.Id)
+                                                                                                                .FirstOrDefault())
                                                                            .Count(s => s.StudentId == x.StudentId &&
                                                                                       (s.PaidDate < x.PaidDate ||
                                                                                       (s.PaidDate == x.PaidDate &&
