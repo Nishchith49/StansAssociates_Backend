@@ -56,6 +56,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 DOB = model.DOB,
                 Address = model.Address,
                 RouteId = model.RouteId,
+                RouteCost = model.RouteCost,
                 //TotalPaid = model.TotalPaid,
                 Street = model.Street,
                 Pincode = model.Pincode,
@@ -103,6 +104,7 @@ namespace StansAssociates_Backend.Concrete.Services
             student.DOB = model.DOB;
             student.Address = model.Address;
             student.RouteId = model.RouteId;
+            student.RouteCost = model.RouteCost;
             student.Street = model.Street;
             student.Pincode = model.Pincode;
             student.CityId = model.CityId;
@@ -162,7 +164,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                  RouteId = x.RouteId,
                                                  BusNo = x.Route.BusNo,
                                                  BoardingPoint = x.Route.BoardingPoint,
-                                                 RouteCost = x.Route.RouteCost,
+                                                 RouteCost = x.RouteCost,
                                                  TotalPaid = x.TotalPaid,
                                                  Street = x.Street,
                                                  Pincode = x.Pincode,
@@ -229,7 +231,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                             RouteId = x.RouteId,
                                             BusNo = x.Route.BusNo,
                                             BoardingPoint = x.Route.BoardingPoint,
-                                            RouteCost = x.Route.RouteCost,
+                                            RouteCost = x.RouteCost,
                                             TotalPaid = x.TotalPaid,
                                             Street = x.Street,
                                             Pincode = x.Pincode,
@@ -367,9 +369,9 @@ namespace StansAssociates_Backend.Concrete.Services
                                                     Phone = x.Phone,
                                                     Class = x.Class,
                                                     Section = x.Section,
-                                                    TotalAmount = x.Route.RouteCost,
+                                                    TotalAmount = x.RouteCost,
                                                     Paid = x.TotalPaid,
-                                                    Due = x.Route.RouteCost - x.TotalPaid,
+                                                    Due = x.RouteCost - x.TotalPaid,
                                                     Fees = x.StudentFeesHistories
                                                             .Where(f => f.StudentbysessionId == x.Studentbysessions
                                                                                                  .OrderByDescending(x => x.SessionId)
@@ -443,7 +445,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                             Phone = x.Student.Phone,
                                                             Class = x.Student.Class,
                                                             Section = x.Student.Section,
-                                                            TotalAmount = x.Student.Route.RouteCost,
+                                                            TotalAmount = x.Student.RouteCost,
                                                             Term = _context.StudentFeesHistories
                                                                            .Where(x => x.StudentbysessionId == x.Student.Studentbysessions
                                                                                                                 .OrderByDescending(x => x.SessionId)
@@ -455,7 +457,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                                                       (s.CreatedDate < x.CreatedDate ||
                                                                                       (s.CreatedDate == x.CreatedDate && s.Id <= x.Id))))),
                                                             Paid = x.Student.TotalPaid,
-                                                            Due = x.Student.Route.RouteCost - x.Student.TotalPaid,
+                                                            Due = x.Student.RouteCost - x.Student.TotalPaid,
                                                             Id = x.Id,
                                                             Amount = x.Amount,
                                                             PaidMode = x.PaidMode,

@@ -60,6 +60,9 @@ namespace StansAssociates_Backend.Entities
         [InverseProperty(nameof(Route.Students))]
         public Route Route { get; set; }
 
+        [Column("route_cost")]
+        public decimal RouteCost { get; set; }
+
         [Column("total_paid")]
         public decimal TotalPaid { get; set; }
 

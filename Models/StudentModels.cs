@@ -49,6 +49,9 @@ namespace StansAssociates_Backend.Models
         [JsonProperty("routeId")]
         public long RouteId { get; set; }
 
+        [JsonProperty("routeCost")]
+        public decimal RouteCost { get; set; }
+
         //[JsonProperty("totalPaid")]
         //public decimal TotalPaid { get; set; }
 
