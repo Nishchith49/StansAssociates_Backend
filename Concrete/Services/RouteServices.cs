@@ -74,7 +74,8 @@ namespace StansAssociates_Backend.Concrete.Services
                                        .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
                                                    x.BoardingPoint.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
                                                    x.BusNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
-                                                   x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                                   x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                   x.RouteCost.ToString().Contains(model.FormattedSearchString()))
                                        .GroupBy(x => 1)
                                        .Select(x => new PagedResponseWithQuery<List<GetRouteModel>>
                                        {

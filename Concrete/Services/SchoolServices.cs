@@ -101,7 +101,10 @@ namespace StansAssociates_Backend.Concrete.Services
             var schools = await _context.Users
                                         .Where(x => x.UserRoles.Any(x => x.RoleId == 4))
                                         .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
-                                                    x.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                                    x.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                    x.EmailId.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                    x.PhoneNumber.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                    x.City.CityName.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                         .GroupBy(x => 1)
                                         .Select(x => new PagedResponseWithQuery<List<GetSchoolModel>>
                                         {

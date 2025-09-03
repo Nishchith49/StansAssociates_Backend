@@ -167,6 +167,12 @@ namespace StansAssociates_Backend.Models
 
         [JsonProperty("schoolId")]
         public long? SchoolId { get; set; }
+
+        [JsonProperty("startDate")]
+        public DateTime? StartDate { get; set; }
+
+        [JsonProperty("endDate")]
+        public DateTime? EndDate { get; set; }
     }
 
 

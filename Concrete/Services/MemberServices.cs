@@ -116,7 +116,12 @@ namespace StansAssociates_Backend.Concrete.Services
                                        .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.SchoolId)
                                        .Where(x => x.UserRoles.Any(x => x.RoleId == 2))
                                        .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
-                                                   x.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                                   x.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                   x.EmailId.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                   x.PhoneNumber.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                   x.Gender.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                   x.DOB.ToString().ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                   x.City.CityName.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                        .GroupBy(x => 1)
                                        .Select(x => new PagedResponseWithQuery<List<GetStaffModel>>
                                        {
@@ -301,7 +306,12 @@ namespace StansAssociates_Backend.Concrete.Services
                                          .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.SchoolId)
                                          .Where(x => x.UserRoles.Any(x => x.RoleId == 3))
                                          .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
-                                                     x.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                                     x.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.EmailId.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.PhoneNumber.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.Gender.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.DOB.ToString().ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.City.CityName.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                          .GroupBy(x => 1)
                                          .Select(x => new PagedResponseWithQuery<List<GetTeacherModel>>
                                          {

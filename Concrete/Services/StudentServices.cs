@@ -135,10 +135,22 @@ namespace StansAssociates_Backend.Concrete.Services
                                                                    .ToLower()
                                                                    .Replace(" ", string.Empty)))
                                          .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
-                                                    (x.FName + x.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
-                                                     x.AdmissionNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
                                                      x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
-                                                     x.Phone.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                                     x.Affiliation.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.AdmissionNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                    (x.FName + x.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.Class.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.Section.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.FatherName.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.Phone.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.Address.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.Year.ToString().ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.Route.BoardingPoint.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.Route.BusNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.RouteCost.ToString().ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.StudentFeesHistories.Any(x => x.PaidDate.ToString().ToLower().Replace(" ", "").Contains(model.FormattedSearchString())) ||
+                                                     x.TotalPaid.ToString().ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                     x.Remark.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                          .GroupBy(x => 1)
                                          .Select(x => new PagedResponseWithQuery<List<GetStudentModel>>
                                          {
@@ -332,11 +344,16 @@ namespace StansAssociates_Backend.Concrete.Services
                                             .Where(x => _currentUser.IsAdmin || x.SchoolId == _currentUser.SchoolId)
                                             .Where(x => model.StudentId == null || x.Id == model.StudentId)
                                             .Where(x => model.SchoolId == null || x.SchoolId == model.SchoolId)
+                                            .Where(x => model.StartDate == null || x.StudentFeesHistories.Any(x => x.PaidDate.Date >= model.StartDate.Value.Date))
+                                            .Where(x => model.EndDate == null || x.StudentFeesHistories.Any(x => x.PaidDate.Date <= model.EndDate.Value.Date))
                                             .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
+                                                        x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
                                                        (x.FName + x.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
                                                         x.AdmissionNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
-                                                        x.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
-                                                        x.Phone.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                                        x.Phone.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                        x.StudentFeesHistories.Any(x => x.PaidMode.ToLower().Replace(" ", "").Contains(model.FormattedSearchString())) ||
+                                                        x.StudentFeesHistories.Any(x => x.Amount.ToString().ToLower().Replace(" ", "").Contains(model.FormattedSearchString())) ||
+                                                        x.StudentFeesHistories.Any(x => x.PaidDate.ToString().ToLower().Replace(" ", "").Contains(model.FormattedSearchString())))
                                             .GroupBy(x => 1)
                                             .Select(x => new PagedResponseWithQuery<List<GetStudentFeeDetailsModel>>
                                             {
@@ -403,11 +420,16 @@ namespace StansAssociates_Backend.Concrete.Services
                                             .Where(x => _currentUser.IsAdmin || x.Student.SchoolId == _currentUser.SchoolId)
                                             .Where(x => model.StudentId == null || x.StudentId == model.StudentId)
                                             .Where(x => model.SchoolId == null || x.Student.SchoolId == model.SchoolId)
+                                            .Where(x => model.StartDate == null || x.PaidDate.Date >= model.StartDate.Value.Date)
+                                            .Where(x => model.EndDate == null || x.PaidDate.Date <= model.EndDate.Value.Date)
                                             .Where(x => string.IsNullOrWhiteSpace(model.FormattedSearchString()) ||
+                                                        x.Student.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
                                                        (x.Student.FName + x.Student.LName).ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
                                                         x.Student.AdmissionNo.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
-                                                        x.Student.School.Name.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
-                                                        x.Student.Phone.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
+                                                        x.Student.Phone.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                        x.PaidMode.ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                        x.Amount.ToString().ToLower().Replace(" ", "").Contains(model.FormattedSearchString()) ||
+                                                        x.PaidDate.ToString().ToLower().Replace(" ", "").Contains(model.FormattedSearchString()))
                                             .Where(x => x.StudentbysessionId == x.Student.Studentbysessions
                                                                                  .OrderByDescending(x => x.SessionId)
                                                                                  .Select(x => x.Id)
