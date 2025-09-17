@@ -10,6 +10,7 @@ namespace StansAssociates_Backend.Concrete.IServices
         Task<List<DropDownModel>> GetCityDropDown(long stateId);
         Task<List<DropDownModel>> GetStateDropDown(long countryId);
         Task<List<DropDownModel>> GetCountryDropDown();
+        Task<List<DropDownModel>> GetEmployeeDropDown();
         Task<APIResponse> InsertIndiaData();
     }
 }

@@ -23,6 +23,8 @@ public partial class StansassociatesAntonyContext : DbContext
     public virtual DbSet<Country> Countries { get; set; }
     public virtual DbSet<State> States { get; set; }
     public virtual DbSet<City> Cities { get; set; }
+    public virtual DbSet<Employee> Employees { get; set; }
+    public virtual DbSet<EmployeeAttendance> EmployeeAttendances { get; set; }
     //public virtual DbSet<Media> Media { get; set; }
 
 
@@ -34,5 +36,6 @@ public partial class StansassociatesAntonyContext : DbContext
         modelBuilder.Entity<StudentFeesHistory>().HasQueryFilter(x => !x.Student.IsDeleted && !x.Student.School.IsDeleted && !x.Student.Route.IsDeleted);
         modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDeleted);
         modelBuilder.Entity<Route>().HasQueryFilter(x => !x.IsDeleted && !x.School.IsDeleted);
+        modelBuilder.Entity<Employee>().HasQueryFilter(x => !x.IsDeleted);
     }
 }

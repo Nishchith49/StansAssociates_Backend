@@ -43,7 +43,7 @@ namespace StansAssociates_Backend.Models
         [JsonProperty("createDate")]
         public DateTime CreatedDate { get; set; }
 
-        [JsonProperty("editDate")]
+        [JsonProperty("updatedDate")]
         public DateTime UpdatedDate { get; set; }
     }
 }

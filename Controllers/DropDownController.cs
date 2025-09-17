@@ -61,6 +61,13 @@ namespace StansAssociates_Backend.Controllers
 
 
         [HttpGet("[action]")]
+        public async Task<List<DropDownModel>> GetEmployeeDropDown()
+        {
+            return await _dropDownServices.GetEmployeeDropDown();
+        }
+
+
+        [HttpGet("[action]")]
         public async Task<APIResponse> InsertIndiaData()
         {
             return await _dropDownServices.InsertIndiaData();

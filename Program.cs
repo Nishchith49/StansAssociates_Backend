@@ -43,7 +43,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = $"StansAssociates Backend Admin {env}",
         Version = "1.0",
-        Description = "JobPortal using ASP.NET CORE 9",
+        Description = "StansAssociates using ASP.NET CORE 9",
         Contact = new OpenApiContact
         {
             Name = "",
@@ -106,6 +106,7 @@ builder.Services.AddScoped<IStudentServices, StudentService>();
 builder.Services.AddScoped<IDropDownServices, DropDownServices>();
 builder.Services.AddScoped<ISchoolServices, SchoolServices>();
 builder.Services.AddScoped<ITeamServices, TeamServices>();
+builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
 
 var app = builder.Build();
 

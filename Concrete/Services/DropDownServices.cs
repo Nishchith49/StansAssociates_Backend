@@ -105,6 +105,19 @@ namespace StansAssociates_Backend.Concrete.Services
         }
 
 
+        public async Task<List<DropDownModel>> GetEmployeeDropDown()
+        {
+            var res = await _context.Employees
+                                    .Select(x => new DropDownModel
+                                    {
+                                        Label = x.Name,
+                                        Value = x.Id
+                                    })
+                                    .ToListAsync();
+            return res;
+        }
+
+
         public async Task<APIResponse> InsertIndiaData()
         {
             using var client = new HttpClient();
