@@ -18,6 +18,9 @@ namespace StansAssociates_Backend.Entities
         [Column("status")]
         public int Status { get; set; }
 
+        [Column("status_name")]
+        public string StatusName { get; set; }
+
         [Column("remarks")]
         public string? Remarks { get; set; }
     }

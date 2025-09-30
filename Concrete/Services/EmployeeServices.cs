@@ -98,7 +98,24 @@ namespace StansAssociates_Backend.Concrete.Services
                                                Thl = x.THL,
                                                IsActive = x.IsActive,
                                                CreatedDate = x.CreatedDate,
-                                               UpdatedDate = x.UpdatedDate
+                                               UpdatedDate = x.UpdatedDate,
+                                               EmployeeAttendance = x.EmployeeAttendances
+                                                                     .Where(a => a.EmployeeId == x.Id)
+                                                                     .Where(a => model.Year == null || a.AttendanceDate.Year == model.Year)
+                                                                     .Where(a => model.Month == null || a.AttendanceDate.Month == model.Month)
+                                                                     .Select(x => new GetEmployeeAttendanceModel
+                                                                     {
+                                                                         EmployeeId = x.Id,
+                                                                         EmployeeName = x.Employee.Name,
+                                                                         Id = x.Id,
+                                                                         AttendanceDate = x.AttendanceDate,
+                                                                         Status = x.Status,
+                                                                         StatusName = x.StatusName,
+                                                                         Remarks = x.Remarks,
+                                                                         CreatedDate = x.CreatedDate,
+                                                                         UpdatedDate = x.UpdatedDate
+
+                                                                     }).ToList()
                                            })
                                            .Skip(model.PageSize * model.PageIndex)
                                            .Take(model.PageSize)
@@ -157,6 +174,7 @@ namespace StansAssociates_Backend.Concrete.Services
                 EmployeeId = model.EmployeeId,
                 AttendanceDate = model.AttendanceDate,
                 Status = model.Status,
+                StatusName = Enum.GetName(typeof(AttendanceStatus), model.Status) ?? "",
                 Remarks = model.Remarks
             };
             await _context.AddAsync(attendance);
@@ -203,6 +221,7 @@ namespace StansAssociates_Backend.Concrete.Services
                     EmployeeId = empId,
                     AttendanceDate = model.AttendanceDate,
                     Status = model.Status,
+                    StatusName = Enum.GetName(typeof(AttendanceStatus), model.Status) ?? "",
                     Remarks = finalRemarks
                 });
             }
@@ -222,15 +241,16 @@ namespace StansAssociates_Backend.Concrete.Services
                                            .FirstOrDefaultAsync();
             if (attendance == null)
                 return new(ResponseConstants.InvalidId, 400);
-            var attendanceExists = await _context.EmployeeAttendances
-                                                 .AnyAsync(x => x.EmployeeId == model.EmployeeId &&
-                                                                x.AttendanceDate == model.AttendanceDate &&
-                                                                x.Id != model.Id);
-            if (attendanceExists)
-                return new APIResponse("Attendance for this employee on this date already exists.", 400);
+            //var attendanceExists = await _context.EmployeeAttendances
+            //                                     .AnyAsync(x => x.EmployeeId == model.EmployeeId &&
+            //                                                    x.AttendanceDate == model.AttendanceDate &&
+            //                                                    x.Id != model.Id);
+            //if (attendanceExists)
+            //    return new APIResponse("Attendance for this employee on this date already exists.", 400);
             attendance.EmployeeId = model.EmployeeId;
             attendance.AttendanceDate = model.AttendanceDate;
             attendance.Status = model.Status;
+            attendance.StatusName = Enum.GetName(typeof(AttendanceStatus), model.Status) ?? "";
             attendance.Remarks = model.Remarks;
             attendance.UpdatedDate = DateTime.Now;
             _context.Update(attendance);
@@ -260,6 +280,7 @@ namespace StansAssociates_Backend.Concrete.Services
                                                     EmployeeName = x.Employee.Name,
                                                     AttendanceDate = x.AttendanceDate,
                                                     Status = x.Status,
+                                                    StatusName = x.StatusName,
                                                     Remarks = x.Remarks,
                                                     CreatedDate = x.CreatedDate,
                                                     UpdatedDate = x.UpdatedDate

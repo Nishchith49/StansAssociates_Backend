@@ -33,6 +33,11 @@ namespace StansAssociates_Backend.Models
 
     public class GetEmployeesFilterModel : PagedResponseInput
     {
+        [JsonProperty("year")]
+        public int? Year { get; set; }
+
+        [JsonProperty("month")]
+        public int? Month { get; set; }
     }
 
 
@@ -46,6 +51,9 @@ namespace StansAssociates_Backend.Models
 
         [JsonProperty("updatedDate")]
         public DateTime UpdatedDate { get; set; }
+
+        [JsonProperty("employeeAttendance")]
+        public IReadOnlyList<GetEmployeeAttendanceModel> EmployeeAttendance { get; set; }
     }
 
 
@@ -100,6 +108,9 @@ namespace StansAssociates_Backend.Models
 
     public class GetEmployeeAttendanceModel : UpdateEmployeeAttendanceModel
     {
+        [JsonProperty("statusName")]
+        public string StatusName { get; set; }
+
         [JsonProperty("employeeName")]
         public string EmployeeName { get; set; }
 

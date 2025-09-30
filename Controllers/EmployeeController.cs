@@ -8,7 +8,7 @@ namespace StansAssociates_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Staff")]
     [ApiExplorerSettings(GroupName = "StansAssociates Backend Admin")]
     public class EmployeeController : ControllerBase
     {
